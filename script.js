@@ -2,6 +2,7 @@ const nameInput = document.getElementById("nameInput");
 const titleInput = document.getElementById("titleInput");
 const introInput = document.getElementById("introInput");
 const skillsInput = document.getElementById("skillsInput");
+
 const downloadBtn = document.getElementById("downloadBtn");
 
 const avatarPreview = document.getElementById("avatarPreview");
@@ -9,6 +10,7 @@ const namePreview = document.getElementById("namePreview");
 const titlePreview = document.getElementById("titlePreview");
 const introPreview = document.getElementById("introPreview");
 const skillsPreview = document.getElementById("skillsPreview");
+/*const skills_outerPreview = document.getElementById("skills_outerPreview");*/
 
 const previewArea = document.querySelector(".preview-area");
 const profileCard = document.querySelector(".profile-card");
@@ -31,6 +33,7 @@ const colorState = {
 	title: "#555555",
 	intro: "#444444",
 	skills: "#222222",
+	skills_outer: "#f1f3f5",
 	background: "#dfe9f3",
 	card: "#ffffff"
 };
@@ -39,7 +42,8 @@ const colorTargetNames = {
 	name: "姓名",
 	title: "身分 / 標題",
 	intro: "自我介紹",
-	skills: "技能",
+	skills: "技能字體顏色",
+	skills_outer: "技能外匡顏色",
 	background: "背景顏色",
 	card: "卡片顏色"
 };
@@ -94,6 +98,7 @@ function renderPreview() {
 
 	document.querySelectorAll("#skillsPreview span").forEach(skillTag => {
 		skillTag.style.color = colorState.skills;
+		skillTag.style.background = colorState.skills_outer;
 	});
 
 	previewArea.style.background = colorState.background;
@@ -275,8 +280,8 @@ function generateZipFile() {
 	const avatarText = name ? name[0] : "你";
 
 	const skillHTML = skills.length > 0
-		? skills.map(skill => `<span style="color: ${colorState.skills};">${skill}</span>`).join("\n\t\t\t\t\t")
-		: `<span style="color: ${colorState.skills};">技能</span>`;
+		? skills.map(skill => `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer};">${skill}</span>`).join("\n\t\t\t\t\t")
+		: `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer};">技能</span>`;
 
 	const htmlContent = `<!DOCTYPE html>
 <html lang="zh-Hant">
