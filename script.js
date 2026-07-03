@@ -26,6 +26,15 @@ const hexColorInput = document.getElementById("hexColorInput");
 const colorPreviewBox = document.getElementById("colorPreviewBox");
 const colorPreviewText = document.getElementById("colorPreviewText");
 
+const nameSizeInput = document.getElementById("nameSizeInput");
+const titleSizeInput = document.getElementById("titleSizeInput");
+const introSizeInput = document.getElementById("introSizeInput");
+const skillsSizeInput = document.getElementById("skillsSizeInput");
+
+const sizeInputs = document.querySelectorAll(".size-input");
+const sizeMinusButtons = document.querySelectorAll(".size-minus");
+const sizePlusButtons = document.querySelectorAll(".size-plus");
+
 let currentColorTarget = null;
 
 const colorState = {
@@ -48,6 +57,20 @@ const colorTargetNames = {
 	card: "卡片顏色"
 };
 
+const fontSizeState = {
+	name: 44,
+	title: 24,
+	intro: 17,
+	skills: 14
+};
+
+const fontSizeLimit = {
+	name: { min: 0, max: 999 },
+	title: { min: 0, max: 999 },
+	intro: { min: 0, max: 999 },
+	skills: { min: 0, max: 999 }
+};
+
 /* 你提供的色票表 */
 const colorArray = [
 	"#ffffff", "#e5e4e4", "#d9d8d8", "#c0bdbd", "#a7a4a4", "#8e8a8b", "#827e7f", "#767173", "#5c585a", "#000000",
@@ -66,6 +89,10 @@ function renderPreview() {
 	const name = nameInput.value.trim();
 	const title = titleInput.value.trim();
 	const intro = introInput.value.trim();
+
+	namePreview.style.fontSize = `${fontSizeState.name}px`;
+	titlePreview.style.fontSize = `${fontSizeState.title}px`;
+	introPreview.style.fontSize = `${fontSizeState.intro}px`;
 
 	const skills = skillsInput.value
 		.split(",")
@@ -96,14 +123,80 @@ function renderPreview() {
 	titlePreview.style.color = colorState.title;
 	introPreview.style.color = colorState.intro;
 
+	namePreview.style.fontSize = `${fontSizeState.name}px`;
+	titlePreview.style.fontSize = `${fontSizeState.title}px`;
+	introPreview.style.fontSize = `${fontSizeState.intro}px`;
+
 	document.querySelectorAll("#skillsPreview span").forEach(skillTag => {
 		skillTag.style.color = colorState.skills;
 		skillTag.style.background = colorState.skills_outer;
+		skillTag.style.fontSize = `${fontSizeState.skills}px`;
 	});
 
 	previewArea.style.background = colorState.background;
 	profileCard.style.background = colorState.card;
+
+	updateFontSizeInputs();
 }
+
+function updateFontSizeInputs() {
+	nameSizeInput.value = fontSizeState.name;
+	titleSizeInput.value = fontSizeState.title;
+	introSizeInput.value = fontSizeState.intro;
+	skillsSizeInput.value = fontSizeState.skills;
+}
+
+function changeFontSize(target, amount) {
+	const limit = fontSizeLimit[target];
+
+	fontSizeState[target] += amount;
+
+	if (fontSizeState[target] < limit.min) {
+		fontSizeState[target] = limit.min;
+	}
+
+	if (fontSizeState[target] > limit.max) {
+		fontSizeState[target] = limit.max;
+	}
+
+	renderPreview();
+}
+
+sizeMinusButtons.forEach(button => {
+	button.addEventListener("click", () => {
+		const target = button.dataset.target;
+		changeFontSize(target, -1);
+	});
+});
+
+sizePlusButtons.forEach(button => {
+	button.addEventListener("click", () => {
+		const target = button.dataset.target;
+		changeFontSize(target, 1);
+	});
+});
+
+sizeInputs.forEach(input => {
+	input.addEventListener("input", () => {
+		const target = input.dataset.target;
+		const limit = fontSizeLimit[target];
+
+		let value = Number(input.value);
+
+		if (Number.isNaN(value)) return;
+
+		if (value < limit.min) {
+			value = limit.min;
+		}
+
+		if (value > limit.max) {
+			value = limit.max;
+		}
+
+		fontSizeState[target] = value;
+		renderPreview();
+	});
+});
 
 function isValidHexColor(color) {
 	return /^#[0-9A-Fa-f]{6}$/.test(color);
@@ -280,8 +373,8 @@ function generateZipFile() {
 	const avatarText = name ? name[0] : "你";
 
 	const skillHTML = skills.length > 0
-		? skills.map(skill => `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer};">${skill}</span>`).join("\n\t\t\t\t\t")
-		: `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer};">技能</span>`;
+		? skills.map(skill => `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer}; font-size: ${fontSizeState.skills}px;">${skill}</span>`).join("\n\t\t\t\t\t")
+		: `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer}; font-size: ${fontSizeState.skills}px;">技能</span>`;
 
 	const htmlContent = `<!DOCTYPE html>
 <html lang="zh-Hant">

@@ -20,9 +20,12 @@
 
             <div class="form-group">
                 <div class="label-row">
-                    <label>背景顏色</label>
+                    <label>主體調整</label>
+                </div>
+                <div class="label-row">
+                    背景顏色
                     <button class="color-btn" data-target="background">🎨</button>
-                    <label>卡片顏色</label>
+                    卡片顏色
                     <button class="color-btn" data-target="card">🎨</button>
                 </div>
             </div>
@@ -30,7 +33,30 @@
             <div class="form-group">
                 <div class="label-row">
                     <label for="nameInput">姓名</label>
+                </div>
+
+                <div class="label-row">
+                    顏色
+
                     <button class="color-btn" data-target="name">🎨</button>
+                    
+                    大小
+
+                    <div class="stepper">
+                        <button class="size-minus" data-target="name">-</button>
+
+                        <input 
+                            type="number" 
+                            class="size-value size-input" 
+                            id="nameSizeInput" 
+                            data-target="name"
+                            value="44"
+                            min="0"
+                            max="999"
+                        />
+                        
+                        <button class="size-plus" data-target="name">+</button>
+                    </div>
                 </div>
 
                 <input
@@ -43,7 +69,30 @@
             <div class="form-group">
                 <div class="label-row">
                     <label for="titleInput">身分 / 標題</label>
+                </div>
+
+                <div class="label-row">
+                    顏色
+
                     <button class="color-btn" data-target="title">🎨</button>
+
+                    大小
+
+                    <div class="stepper">
+                        <button class="size-minus" data-target="title">-</button>
+                        
+                        <input 
+                            type="number" 
+                            class="size-value size-input" 
+                            id="titleSizeInput" 
+                            data-target="title"
+                            value="24"
+                            min="0"
+                            max="999"
+                        />
+
+                        <button class="size-plus" data-target="title">+</button>
+                    </div>
                 </div>
 
                 <input
@@ -56,8 +105,32 @@
             <div class="form-group">
                 <div class="label-row">
                     <label for="introInput">自我介紹</label>
-                    <button class="color-btn" data-target="intro">🎨</button>
                 </div>
+
+                <div class="label-row">
+                    顏色
+
+                    <button class="color-btn" data-target="intro">🎨</button>
+
+                    大小
+
+                    <div class="stepper">
+                        <button class="size-minus" data-target="intro">-</button>
+                        
+                        <input 
+                            type="number" 
+                            class="size-value size-input" 
+                            id="introSizeInput" 
+                            data-target="intro"
+                            value="17"
+                            min="0"
+                            max="999"
+                        />
+
+                        <button class="size-plus" data-target="intro">+</button>
+                    </div>
+                </div>
+
                 <textarea id="introInput" rows="6">這裡會顯示你的自我介紹</textarea>
             </div>
 
@@ -69,6 +142,26 @@
                     外框顏色
                     <button class="color-btn" data-target="skills_outer">🎨</button>
                 </div>
+                <div class="label-row">
+                    大小
+                    
+                    <div class="stepper">
+                        <button class="size-minus" data-target="skills">-</button>
+                        
+                        <input 
+                            type="number" 
+                            class="size-value size-input" 
+                            id="skillsSizeInput" 
+                            data-target="skills"
+                            value="14"
+                            min="0"
+                            max="999"
+                        />
+
+                        <button class="size-plus" data-target="skills">+</button>
+                    </div>
+                </div>
+                
                 <input
                     type="text"
                     id="skillsInput"
