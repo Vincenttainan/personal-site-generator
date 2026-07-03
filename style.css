@@ -193,6 +193,171 @@ textarea {
 	font-size: 14px;
 }
 
+/* 欄位標題列 + 調色按鈕 */
+
+.label-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 8px;
+}
+
+.label-row label {
+	margin-bottom: 0;
+}
+
+.color-btn {
+	border: none;
+	background: #f1f3f5;
+	border-radius: 999px;
+	width: 34px;
+	height: 34px;
+	cursor: pointer;
+	font-size: 16px;
+	transition: 0.2s;
+}
+
+.color-btn:hover {
+	background: #e5e7eb;
+	transform: translateY(-1px);
+}
+
+/* 可移動調色小視窗 */
+
+.floating-color-modal {
+	position: fixed;
+	top: 140px;
+	left: 420px;
+	width: 270px;
+	background: #f1f1f1;
+	border: 1px solid #222;
+	border-radius: 12px;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+	z-index: 999;
+	display: none;
+	overflow: hidden;
+}
+
+.floating-color-modal.active {
+	display: block;
+}
+
+.floating-modal-header {
+	padding: 10px 12px;
+	background: #222;
+	color: white;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	cursor: move;
+	user-select: none;
+}
+
+.floating-modal-header span {
+	font-size: 14px;
+	font-weight: 700;
+}
+
+#floatingModalClose {
+	border: none;
+	background: #444;
+	color: white;
+	width: 26px;
+	height: 26px;
+	border-radius: 50%;
+	cursor: pointer;
+	font-size: 18px;
+	line-height: 1;
+}
+
+#floatingModalClose:hover {
+	background: #666;
+}
+
+.floating-modal-body {
+	padding: 12px;
+}
+
+.color-grid {
+	display: flex;
+	width: 100%;
+	min-height: 220px;
+	padding: 6px;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	background: #cec7c7;
+	border-radius: 8px;
+	margin-bottom: 12px;
+}
+
+.color-preview-box {
+	width: 100%;
+	height: 42px;
+	border-radius: 10px;
+	border: 1px solid rgba(0, 0, 0, 0.18);
+	background: #222222;
+	margin-bottom: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+#colorPreviewText {
+	font-family: monospace;
+	font-size: 14px;
+	font-weight: 700;
+	color: white;
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.color-square {
+	width: 16px;
+	height: 16px;
+	margin: 3px;
+	border: 1px solid rgba(0, 0, 0, 0.18);
+	cursor: pointer;
+	transition: 0.15s;
+}
+
+.color-square:hover {
+	transform: scale(1.25);
+	border-color: #000;
+}
+
+.color-square.selected {
+	outline: 2px solid #000;
+	outline-offset: 2px;
+}
+
+.hex-input-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.hex-input-row label {
+	font-size: 14px;
+	font-weight: 700;
+	white-space: nowrap;
+}
+
+#hexColorInput {
+	flex: 1;
+	border: 1px solid #aaa;
+	border-radius: 8px;
+	padding: 8px 10px;
+	font-family: monospace;
+	font-size: 14px;
+	outline: none;
+}
+
+#hexColorInput:focus {
+	border-color: #222;
+}
+
 @media (max-width: 900px) {
 	.builder {
 		grid-template-columns: 1fr;

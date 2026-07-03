@@ -1,85 +1,131 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>個人網頁生成器</title>
-	<link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>個人網頁生成器</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-	<header class="app-header">
-		<h1>個人網頁視覺化生成器</h1>
-		<p>輸入資料後，右側會即時產生個人網頁預覽。</p>
-	</header>
+    <header class="app-header">
+        <h1>個人網頁視覺化生成器</h1>
+        <p>輸入資料後，右側會即時產生個人網頁預覽。</p>
+    </header>
 
-	<main class="builder">
+    <main class="builder">
 
-		<section class="editor-panel">
-			<h2>編輯資料</h2>
+        <section class="editor-panel">
+            <h2>編輯資料</h2>
 
-			<div class="form-group">
-				<label for="nameInput">姓名</label>
-				<input
+            <div class="form-group">
+                <div class="label-row">
+                    <label>背景顏色</label>
+                    <button class="color-btn" data-target="background">🎨</button>
+                </div>
+
+                <div class="label-row">
+                    <label>卡片顏色</label>
+                    <button class="color-btn" data-target="card">🎨</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="label-row">
+                    <label for="nameInput">姓名</label>
+                    <button class="color-btn" data-target="name">🎨</button>
+                </div>
+
+                <input
                     type="text"
                     id="nameInput"
                     value="你的姓名"
                 />
-			</div>
+            </div>
 
-			<div class="form-group">
-				<label for="titleInput">身分 / 標題</label>
-				<input
+            <div class="form-group">
+                <div class="label-row">
+                    <label for="titleInput">身分 / 標題</label>
+                    <button class="color-btn" data-target="title">🎨</button>
+                </div>
+
+                <input
                     type="text"
                     id="titleInput"
                     value="你的身分 / 標題"
                 />
-			</div>
+            </div>
 
-			<div class="form-group">
-				<label for="introInput">自我介紹</label>
+            <div class="form-group">
+                <div class="label-row">
+                    <label for="introInput">自我介紹</label>
+                    <button class="color-btn" data-target="intro">🎨</button>
+                </div>
                 <textarea id="introInput" rows="6">這裡會顯示你的自我介紹</textarea>
-			</div>
+            </div>
 
-			<div class="form-group">
-				<label for="skillsInput">技能</label>
-				<input
+            <div class="form-group">
+                <div class="label-row">
+                    <label for="skillsInput">技能</label>
+                    <button class="color-btn" data-target="skills">🎨</button>
+                </div>
+                <input
                     type="text"
                     id="skillsInput"
                     value="技能1, 技能2, 技能3, 技能4"
                 />
                 <small>請用逗號（, ）分隔，例如：技能1, 技能2, 技能3</small>
-			</div>
-		</section>
+            </div>
+        </section>
 
-		<section class="preview-panel">
-			<div class="preview-header">
-				<h2>即時預覽</h2>
-				<button id="downloadBtn">下載 ZIP</button>
-			</div>
+        <section class="preview-panel">
+            <div class="preview-header">
+                <h2>即時預覽</h2>
+                <button id="downloadBtn">下載 ZIP</button>
+            </div>
 
-			<div class="preview-area">
-				<section class="profile-card">
-					<div class="avatar" id="avatarPreview"></div>
+            <div class="preview-area">
+                <section class="profile-card">
+                    <div class="avatar" id="avatarPreview"></div>
 
-					<div class="profile-content">
-						<p class="label">Personal Portfolio</p>
+                    <div class="profile-content">
+                        <p class="label">Personal Portfolio</p>
 
-						<h1 id="namePreview"></h1>
+                        <h1 id="namePreview"></h1>
 
-						<h2 id="titlePreview"></h2>
+                        <h2 id="titlePreview"></h2>
 
-						<p class="intro" id="introPreview"></p>
+                        <p class="intro" id="introPreview"></p>
 
-						<div class="skills" id="skillsPreview"></div>
-					</div>
-				</section>
-			</div>
-		</section>
+                        <div class="skills" id="skillsPreview"></div>
+                    </div>
+                </section>
+            </div>
+        </section>
 
-	</main>
+    </main>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-	<script src="script.js"></script>
+    <div class="floating-color-modal" id="floatingColorModal">
+        <div class="floating-modal-header" id="floatingModalHeader">
+            <span id="floatingModalTitle">選擇顏色</span>
+            <button id="floatingModalClose">X</button>
+        </div>
+
+        <div class="floating-modal-body">
+            <div class="color-grid" id="colorGrid"></div>
+
+            <div class="color-preview-box" id="colorPreviewBox">
+                <span id="colorPreviewText">#222222</span>
+            </div>
+
+            <div class="hex-input-row">
+                <label for="hexColorInput">色號</label>
+                <input type="text" id="hexColorInput" value="#222222" maxlength="7">
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
