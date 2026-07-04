@@ -184,6 +184,23 @@ textarea {
 	-moz-appearance: textfield;
 }
 
+.control-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	align-items: center;
+	margin-bottom: 10px;
+	justify-content: space-between;
+}
+
+.control-item {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 14px;
+	color: #555;
+}
+
 /* 以下是產生出來的個人網頁樣式 */
 
 .profile-card {

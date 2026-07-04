@@ -1,3 +1,109 @@
+const {
+	defaultProfile,
+	editorFields,
+	globalControls,
+	colorState,
+	colorTargetNames,
+	fontSizeState,
+	fontSizeLimit,
+	colorArray
+} = window.PortfolioData;
+
+function createGlobalControls() {
+	const container = document.getElementById("globalControlsContainer");
+
+	container.innerHTML = `
+		<div class="form-group">
+			<label>主體調整</label>
+
+			<div class="control-row">
+				${globalControls.map(control => `
+					<div class="control-item">
+						<span>${control.label}</span>
+						<button class="color-btn" data-target="${control.key}">🎨</button>
+					</div>
+				`).join("")}
+			</div>
+		</div>
+	`;
+}
+
+function createEditorFields() {
+	const container = document.getElementById("editorFieldsContainer");
+
+	container.innerHTML = editorFields.map(field => {
+		const value = defaultProfile[field.key] || "";
+
+		const inputHTML = field.type === "textarea"
+			? `<textarea id="${field.inputId}" rows="${field.rows || 4}">${value}</textarea>`
+			: `<input type="text" id="${field.inputId}" value="${value}" />`;
+
+		const colorControl = field.hasColor
+			? `
+				<div class="control-item">
+					<span>顏色</span>
+					<button class="color-btn" data-target="${field.key}">🎨</button>
+				</div>
+			`
+			: "";
+
+		const outerColorControl = field.hasOuterColor
+			? `
+				<div class="control-item">
+					<span>外框顏色</span>
+					<button class="color-btn" data-target="${field.key}_outer">🎨</button>
+				</div>
+			`
+			: "";
+
+		const sizeControl = field.hasSize
+			? `
+				<div class="control-item">
+					<span>大小</span>
+
+					<div class="stepper">
+						<button class="size-minus" data-target="${field.key}">-</button>
+
+						<input 
+							type="number"
+							class="size-value size-input"
+							id="${field.sizeInputId}"
+							data-target="${field.key}"
+							value="${field.defaultSize}"
+							min="${field.minSize}"
+							max="${field.maxSize}"
+						/>
+
+						<button class="size-plus" data-target="${field.key}">+</button>
+					</div>
+				</div>
+			`
+			: "";
+
+		const helpText = field.helpText
+			? `<small>${field.helpText}</small>`
+			: "";
+
+		return `
+			<div class="form-group">
+				<label for="${field.inputId}">${field.label}</label>
+
+				<div class="control-row">
+					${colorControl}
+					${outerColorControl}
+					${sizeControl}
+				</div>
+
+				${inputHTML}
+				${helpText}
+			</div>
+		`;
+	}).join("");
+}
+
+createGlobalControls();
+createEditorFields();
+
 const nameInput = document.getElementById("nameInput");
 const titleInput = document.getElementById("titleInput");
 const introInput = document.getElementById("introInput");
@@ -10,13 +116,12 @@ const namePreview = document.getElementById("namePreview");
 const titlePreview = document.getElementById("titlePreview");
 const introPreview = document.getElementById("introPreview");
 const skillsPreview = document.getElementById("skillsPreview");
-/*const skills_outerPreview = document.getElementById("skills_outerPreview");*/
 
 const previewArea = document.querySelector(".preview-area");
 const profileCard = document.querySelector(".profile-card");
 
-/* 調色 Modal 元素 */
 const colorButtons = document.querySelectorAll(".color-btn");
+
 const floatingColorModal = document.getElementById("floatingColorModal");
 const floatingModalHeader = document.getElementById("floatingModalHeader");
 const floatingModalTitle = document.getElementById("floatingModalTitle");
@@ -37,53 +142,10 @@ const sizePlusButtons = document.querySelectorAll(".size-plus");
 
 let currentColorTarget = null;
 
-const colorState = {
-	name: "#222222",
-	title: "#555555",
-	intro: "#444444",
-	skills: "#222222",
-	skills_outer: "#f1f3f5",
-	background: "#dfe9f3",
-	card: "#ffffff"
-};
-
-const colorTargetNames = {
-	name: "姓名",
-	title: "身分 / 標題",
-	intro: "自我介紹",
-	skills: "技能字體顏色",
-	skills_outer: "技能外匡顏色",
-	background: "背景顏色",
-	card: "卡片顏色"
-};
-
-const fontSizeState = {
-	name: 44,
-	title: 24,
-	intro: 17,
-	skills: 14
-};
-
-const fontSizeLimit = {
-	name: { min: 0, max: 999 },
-	title: { min: 0, max: 999 },
-	intro: { min: 0, max: 999 },
-	skills: { min: 0, max: 999 }
-};
-
-/* 你提供的色票表 */
-const colorArray = [
-	"#ffffff", "#e5e4e4", "#d9d8d8", "#c0bdbd", "#a7a4a4", "#8e8a8b", "#827e7f", "#767173", "#5c585a", "#000000",
-	"#fefcdf", "#fef4c4", "#feed9b", "#fee573", "#ffed43", "#f6cc0b", "#f6cc0b", "#c9a601", "#ad8e00", "#8c7301",
-	"#ffded3", "#ffc4b0", "#ff9d7d", "#ff7a4e", "#ff6600", "#e95d00", "#d15502", "#ba4b01", "#a44201", "#8d3901",
-	"#ffd2d0", "#ffbab7", "#fe9a95", "#ff7a73", "#ff483f", "#fe2419", "#f10b00", "#d40a00", "#940000", "#6d201b",
-	"#ffdaed", "#ffb7dc", "#ffa1d1", "#ff84c3", "#ff57ac", "#fd1289", "#ec0078", "#d6006d", "#bb005f", "#9b014f",
-	"#fcd6fe", "#fbbcff", "#f9a1fe", "#f784fe", "#f564fe", "#f546ff", "#f328ff", "#d801e5", "#c001cb", "#8f0197",
-	"#e2f0fe", "#c7e2fe", "#add5fe", "#92c7fe", "#6eb5ff", "#48a2ff", "#2690fe", "#0162f4", "#013add", "#0021b0",
-	"#d3fdff", "#acfafd", "#7cfaff", "#4af7fe", "#1de6fe", "#01deff", "#00cdec", "#01b6de", "#00a0c2", "#0084a0",
-	"#edffcf", "#dffeaa", "#d1fd88", "#befa5a", "#a8f32a", "#8fd80a", "#79c101", "#3fa701", "#307f00", "#156200",
-	"#d4c89f", "#daad88", "#c49578", "#c2877e", "#ac8295", "#c0a5c4", "#969ac2", "#92b7d7", "#80adaf", "#9ca53b"
-];
+nameInput.value = defaultProfile.name;
+titleInput.value = defaultProfile.title;
+introInput.value = defaultProfile.intro;
+skillsInput.value = defaultProfile.skills;
 
 function renderPreview() {
 	const name = nameInput.value.trim();
@@ -376,7 +438,8 @@ function generateZipFile() {
 		? skills.map(skill => `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer}; font-size: ${fontSizeState.skills}px;">${skill}</span>`).join("\n\t\t\t\t\t")
 		: `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer}; font-size: ${fontSizeState.skills}px;">技能</span>`;
 
-	const htmlContent = `<!DOCTYPE html>
+	const htmlContent = `
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 	<meta charset="UTF-8" />
@@ -393,11 +456,11 @@ function generateZipFile() {
 			<div class="profile-content">
 				<p class="label">Personal Portfolio</p>
 
-				<h1 style="color: ${colorState.name};">${name}</h1>
+				<h1 style="color: ${colorState.name}; font-size: ${fontSizeState.name}px;">${name}</h1>
 
-				<h2 style="color: ${colorState.title};">${title}</h2>
+				<h2 style="color: ${colorState.title}; font-size: ${fontSizeState.title}px;">${title}</h2>
 
-				<p class="intro" style="color: ${colorState.intro};">${intro}</p>
+				<p class="intro" style="color: ${colorState.intro}; font-size: ${fontSizeState.intro}px;">${intro}</p>
 
 				<div class="skills">
 					${skillHTML}
@@ -408,9 +471,11 @@ function generateZipFile() {
 
 	<script src="script.js"></script>
 </body>
-</html>`;
+</html>
+`;
 
-	const cssContent = `* {
+	const cssContent = `
+* {
 	box-sizing: border-box;
 }
 
@@ -511,7 +576,8 @@ body {
 	.skills {
 		justify-content: center;
 	}
-}`;
+}
+`;
 
 	const jsContent = `console.log("Portfolio website loaded.");`;
 
