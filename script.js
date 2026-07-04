@@ -6,6 +6,8 @@ const {
 	colorTargetNames,
 	fontSizeState,
 	fontSizeLimit,
+	avatarState,
+	avatarSizeLimit,
 	colorArray
 } = window.PortfolioData;
 
@@ -115,8 +117,102 @@ function createEditorFields() {
 	}).join("");
 }
 
+function createAvatarControls() {
+	const container = document.getElementById("editorFieldsContainer");
+
+	const avatarControlHTML = `
+		<div class="form-group">
+			<details class="editor-accordion" data-flash-target="avatar">
+				<summary class="accordion-title">
+					<span>頭像設定</span>
+					<span class="accordion-icon">＋</span>
+				</summary>
+
+				<div class="accordion-content">
+					<div class="control-row">
+						<div class="control-item">
+							<span>模式</span>
+
+							<select id="avatarModeInput" class="small-select">
+								<option value="initial">姓氏</option>
+								<option value="photo">照片</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="avatar-control-section" id="avatarPhotoControls">
+						<label for="avatarImageInput">上傳照片</label>
+						<input type="file" id="avatarImageInput" accept="image/*">
+
+						<div class="control-row">
+							<div class="control-item">
+								<span>照片大小</span>
+
+								<div class="stepper">
+									<button type="button" class="avatar-size-minus" data-target="size">-</button>
+
+									<input 
+										type="number"
+										class="size-value size-input avatar-size-input"
+										id="avatarSizeInput"
+										data-target="size"
+										value="${avatarState.size}"
+										min="${avatarSizeLimit.size.min}"
+										max="${avatarSizeLimit.size.max}"
+									/>
+
+									<button type="button" class="avatar-size-plus" data-target="size">+</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="avatar-control-section" id="avatarInitialControls">
+						<div class="control-row">
+							<div class="control-item">
+								<span>底色顏色</span>
+								<button type="button" class="color-btn" data-target="avatar_background">🎨</button>
+							</div>
+
+							<div class="control-item">
+								<span>字體顏色</span>
+								<button type="button" class="color-btn" data-target="avatar_text">🎨</button>
+							</div>
+						</div>
+
+						<div class="control-row">
+							<div class="control-item">
+								<span>字體大小</span>
+
+								<div class="stepper">
+									<button type="button" class="avatar-size-minus" data-target="fontSize">-</button>
+
+									<input 
+										type="number"
+										class="size-value size-input avatar-size-input"
+										id="avatarFontSizeInput"
+										data-target="fontSize"
+										value="${avatarState.fontSize}"
+										min="${avatarSizeLimit.fontSize.min}"
+										max="${avatarSizeLimit.fontSize.max}"
+									/>
+
+									<button type="button" class="avatar-size-plus" data-target="fontSize">+</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</details>
+		</div>
+	`;
+
+	container.insertAdjacentHTML("afterbegin", avatarControlHTML);
+}
+
 createGlobalControls();
 createEditorFields();
+createAvatarControls();
 
 const nameInput = document.getElementById("nameInput");
 const titleInput = document.getElementById("titleInput");
@@ -132,13 +228,99 @@ const introPreview = document.getElementById("introPreview");
 const skillsPreview = document.getElementById("skillsPreview");
 const subheadingPreview = document.getElementById("subheadingPreview");
 
+const avatarModeInput = document.getElementById("avatarModeInput");
+const avatarImageInput = document.getElementById("avatarImageInput");
+const avatarSizeInput = document.getElementById("avatarSizeInput");
+const avatarFontSizeInput = document.getElementById("avatarFontSizeInput");
+const avatarPhotoControls = document.getElementById("avatarPhotoControls");
+const avatarInitialControls = document.getElementById("avatarInitialControls");
+
+const avatarSizeInputs = document.querySelectorAll(".avatar-size-input");
+const avatarSizeMinusButtons = document.querySelectorAll(".avatar-size-minus");
+const avatarSizePlusButtons = document.querySelectorAll(".avatar-size-plus");
+
 const previewArea = document.querySelector(".preview-area");
 const profileCard = document.querySelector(".profile-card");
+
+avatarModeInput.addEventListener("change", () => {
+	avatarState.mode = avatarModeInput.value;
+	renderPreview();
+});
+
+avatarImageInput.addEventListener("change", () => {
+	const file = avatarImageInput.files[0];
+
+	if (!file) return;
+
+	const reader = new FileReader();
+
+	reader.addEventListener("load", () => {
+		avatarState.imageData = reader.result;
+		avatarState.mode = "photo";
+		avatarModeInput.value = "photo";
+		renderPreview();
+	});
+
+	reader.readAsDataURL(file);
+});
+
+function changeAvatarSize(target, amount) {
+	const limit = avatarSizeLimit[target];
+
+	avatarState[target] += amount;
+
+	if (avatarState[target] < limit.min) {
+		avatarState[target] = limit.min;
+	}
+
+	if (avatarState[target] > limit.max) {
+		avatarState[target] = limit.max;
+	}
+
+	renderPreview();
+}
+
+avatarSizeMinusButtons.forEach(button => {
+	button.addEventListener("click", () => {
+		const target = button.dataset.target;
+		changeAvatarSize(target, -1);
+	});
+});
+
+avatarSizePlusButtons.forEach(button => {
+	button.addEventListener("click", () => {
+		const target = button.dataset.target;
+		changeAvatarSize(target, 1);
+	});
+});
+
+avatarSizeInputs.forEach(input => {
+	input.addEventListener("input", () => {
+		const target = input.dataset.target;
+		const limit = avatarSizeLimit[target];
+
+		let value = Number(input.value);
+
+		if (Number.isNaN(value)) return;
+
+		if (value < limit.min) {
+			value = limit.min;
+		}
+
+		if (value > limit.max) {
+			value = limit.max;
+		}
+
+		avatarState[target] = value;
+		renderPreview();
+	});
+});
 
 function getFlashElement(target) {
 	const flashMap = {
 		previewArea: previewArea,
 		card: profileCard,
+		avatar: avatarPreview,
 		name: namePreview,
 		title: titlePreview,
 		subheading: subheadingPreview,
@@ -201,6 +383,49 @@ const sizePlusButtons = document.querySelectorAll(".size-plus");
 
 let currentColorTarget = null;
 
+function renderAvatar(name) {
+	avatarPreview.innerHTML = "";
+
+	avatarPreview.style.width = `${avatarState.size}px`;
+	avatarPreview.style.height = `${avatarState.size}px`;
+
+	if (avatarState.mode === "photo" && avatarState.imageData) {
+		const img = document.createElement("img");
+		img.src = avatarState.imageData;
+		img.alt = "avatar";
+		img.className = "avatar-img";
+
+		avatarPreview.appendChild(img);
+	} else {
+		avatarPreview.textContent = name ? name[0] : "你";
+		avatarPreview.style.background = avatarState.backgroundColor;
+		avatarPreview.style.color = avatarState.textColor;
+		avatarPreview.style.fontSize = `${avatarState.fontSize}px`;
+	}
+
+	if (avatarModeInput) {
+		avatarModeInput.value = avatarState.mode;
+	}
+
+	if (avatarSizeInput) {
+		avatarSizeInput.value = avatarState.size;
+	}
+
+	if (avatarFontSizeInput) {
+		avatarFontSizeInput.value = avatarState.fontSize;
+	}
+
+	if (avatarPhotoControls && avatarInitialControls) {
+		if (avatarState.mode === "photo") {
+			avatarPhotoControls.style.display = "block";
+			avatarInitialControls.style.display = "none";
+		} else {
+			avatarPhotoControls.style.display = "none";
+			avatarInitialControls.style.display = "block";
+		}
+	}
+}
+
 function renderPreview() {
 	const name = nameInput.value.trim();
 	const title = titleInput.value.trim();
@@ -221,7 +446,7 @@ function renderPreview() {
 	subheadingPreview.textContent = subheading || "這裡會顯示小標。";
 	introPreview.textContent = intro || "這裡會顯示你的自我介紹。";
 
-	avatarPreview.textContent = name ? name[0] : "你";
+	renderAvatar(name);
 
 	skillsPreview.innerHTML = "";
 
@@ -327,7 +552,14 @@ function applyColor(color) {
 	if (!currentColorTarget) return;
 	if (!isValidHexColor(color)) return;
 
-	colorState[currentColorTarget] = color;
+	if (currentColorTarget === "avatar_background") {
+		avatarState.backgroundColor = color;
+	} else if (currentColorTarget === "avatar_text") {
+		avatarState.textColor = color;
+	} else {
+		colorState[currentColorTarget] = color;
+	}
+
 	hexColorInput.value = color;
 
 	updateColorPreview(color);
@@ -385,7 +617,15 @@ colorButtons.forEach(button => {
 
 		if (!currentColorTarget) return;
 
-		const currentColor = colorState[currentColorTarget];
+		let currentColor = colorState[currentColorTarget];
+
+		if (currentColorTarget === "avatar_background") {
+			currentColor = avatarState.backgroundColor;
+		}
+
+		if (currentColorTarget === "avatar_text") {
+			currentColor = avatarState.textColor;
+		}
 
         floatingModalTitle.textContent = `調整：${colorTargetNames[currentColorTarget]}`;
         hexColorInput.value = currentColor;
@@ -482,7 +722,7 @@ introInput.addEventListener("input", renderPreview);
 skillsInput.addEventListener("input", renderPreview);
 
 /* 下載 ZIP */
-function generateZipFile() {
+function generateZipFile() {	
 	const name = nameInput.value.trim() || "你的姓名";
 	const title = titleInput.value.trim() || "你的身分 / 標題";
 	const subheading = subheadingInput.value.trim() || "這裡會顯示小標。";
@@ -494,6 +734,10 @@ function generateZipFile() {
 		.filter(skill => skill !== "");
 
 	const avatarText = name ? name[0] : "你";
+
+	const avatarHTML = avatarState.mode === "photo" && avatarState.imageData
+		? `<div class="avatar"><img class="avatar-img" src="${avatarState.imageData}" alt="avatar"></div>`
+		: `<div class="avatar" style="background: ${avatarState.backgroundColor}; color: ${avatarState.textColor}; font-size: ${avatarState.fontSize}px;">${avatarText}</div>`;
 
 	const skillHTML = skills.length > 0
 		? skills.map(skill => `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer}; font-size: ${fontSizeState.skills}px;">${skill}</span>`).join("\n\t\t\t\t\t")
@@ -512,7 +756,7 @@ function generateZipFile() {
 
 	<main class="page">
 		<section class="profile-card">
-			<div class="avatar">${avatarText}</div>
+			<div class="avatar">${avatarHTML}</div>
 
 			<div class="profile-content">
 				<p class="subheading" style="color: ${colorState.subheading}; font-size: ${fontSizeState.subheading}px;">${subheading}</p>
@@ -567,8 +811,8 @@ body {
 }
 
 .avatar {
-	width: 150px;
-	height: 150px;
+	width: ${avatarState.size}px;
+	height: ${avatarState.size}px;
 	border-radius: 50%;
 	background: #222;
 	color: white;
@@ -578,6 +822,14 @@ body {
 	font-size: 60px;
 	font-weight: 700;
 	flex-shrink: 0;
+	overflow: hidden;
+}
+
+.avatar-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
 }
 
 .profile-content {

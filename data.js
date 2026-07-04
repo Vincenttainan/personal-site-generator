@@ -26,7 +26,9 @@ window.PortfolioData = {
 		skills: "技能字體顏色",
 		skills_outer: "技能外框顏色",
 		background: "背景顏色",
-		card: "卡片顏色"
+		card: "卡片顏色",
+		avatar_background: "頭像底色",
+		avatar_text: "頭像字體顏色"
 	},
 
 	fontSizeState: {
@@ -43,6 +45,20 @@ window.PortfolioData = {
 		title: { min: 0, max: 999 },
 		intro: { min: 0, max: 999 },
 		skills: { min: 0, max: 999 }
+	},
+
+	avatarState: {
+		mode: "initial", // initial = 姓氏, photo = 照片
+		imageData: "",
+		size: 150,
+		backgroundColor: "#222222",
+		textColor: "#ffffff",
+		fontSize: 60
+	},
+
+	avatarSizeLimit: {
+		size: { min: 40, max: 300 },
+		fontSize: { min: 10, max: 160 }
 	},
 
 	colorArray: [
