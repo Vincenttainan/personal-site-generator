@@ -14,7 +14,7 @@ function createGlobalControls() {
 
 	container.innerHTML = `
 		<div class="form-group">
-			<details class="editor-accordion">
+			<details class="editor-accordion" data-flash-target="previewArea">
 				<summary class="accordion-title">
 					<span>主體調整</span>
 					<span class="accordion-icon">＋</span>
@@ -93,7 +93,7 @@ function createEditorFields() {
 
 		return `
 			<div class="form-group">
-				<details class="editor-accordion">
+				<details class="editor-accordion" data-flash-target="${field.key}">
 					<summary class="accordion-title">
 						<span>${field.label}</span>
 						<span class="accordion-icon">＋</span>
@@ -134,6 +134,49 @@ const subheadingPreview = document.getElementById("subheadingPreview");
 
 const previewArea = document.querySelector(".preview-area");
 const profileCard = document.querySelector(".profile-card");
+
+function getFlashElement(target) {
+	const flashMap = {
+		previewArea: previewArea,
+		card: profileCard,
+		name: namePreview,
+		title: titlePreview,
+		subheading: subheadingPreview,
+		intro: introPreview,
+		skills: skillsPreview
+	};
+
+	return flashMap[target];
+}
+
+function flashElement(element) {
+	if (!element) return;
+
+	element.classList.remove("preview-flash");
+
+	void element.offsetWidth;
+
+	element.classList.add("preview-flash");
+
+	setTimeout(() => {
+		element.classList.remove("preview-flash");
+	}, 650);
+}
+
+function setupAccordionFlash() {
+	const accordions = document.querySelectorAll(".editor-accordion");
+
+	accordions.forEach(accordion => {
+		accordion.addEventListener("toggle", () => {
+			if (!accordion.open) return;
+
+			const target = accordion.dataset.flashTarget;
+			const flashTarget = getFlashElement(target);
+
+			flashElement(flashTarget);
+		});
+	});
+}
 
 const colorButtons = document.querySelectorAll(".color-btn");
 
@@ -625,6 +668,8 @@ body {
 }
 
 downloadBtn.addEventListener("click", generateZipFile);
+
+setupAccordionFlash();
 
 createColorGrid();
 renderPreview();

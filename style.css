@@ -121,18 +121,6 @@ textarea {
 	justify-content: center;
 }
 
-.size-control {
-	margin-top: 10px;
-}
-
-.size-control label {
-	display: block;
-	margin-bottom: 8px;
-	font-size: 14px;
-	font-weight: 700;
-	color: #555;
-}
-
 .stepper {
 	display: inline-flex;
 	align-items: center;
@@ -499,6 +487,31 @@ textarea {
 #hexColorInput:focus {
 	border-color: #222;
 }
+
+/* flash */
+
+.preview-flash {
+	animation: previewFlash 0.65s ease;
+}
+
+@keyframes previewFlash {
+	0% {
+		box-shadow: 0 0 0 0 rgba(255, 214, 102, 0);
+		transform: scale(1);
+	}
+
+	35% {
+		box-shadow: 0 0 0 6px rgba(0, 255, 0, 0.8);
+		transform: scale(1.03);
+	}
+
+	100% {
+		box-shadow: 0 0 0 0 rgba(255, 214, 102, 0);
+		transform: scale(1);
+	}
+}
+
+/* media */
 
 @media (max-width: 900px) {
 	.builder {
