@@ -1,5 +1,6 @@
 window.PortfolioData = {
 	defaultProfile: {
+        subheading: "Personal Portfolio",
 		name: "你的姓名",
 		title: "你的身分 / 標題",
 		intro: "這裡會顯示你的自我介紹",
@@ -7,6 +8,7 @@ window.PortfolioData = {
 	},
 
 	colorState: {
+        subheading: "#777777",
 		name: "#222222",
 		title: "#555555",
 		intro: "#444444",
@@ -17,6 +19,7 @@ window.PortfolioData = {
 	},
 
 	colorTargetNames: {
+        subheading: "小標",
 		name: "姓名",
 		title: "身分 / 標題",
 		intro: "自我介紹",
@@ -27,6 +30,7 @@ window.PortfolioData = {
 	},
 
 	fontSizeState: {
+        subheading: 22,
 		name: 44,
 		title: 24,
 		intro: 17,
@@ -34,6 +38,7 @@ window.PortfolioData = {
 	},
 
 	fontSizeLimit: {
+        subheading: { min: 0, max: 999 },
 		name: { min: 0, max: 999 },
 		title: { min: 0, max: 999 },
 		intro: { min: 0, max: 999 },
@@ -54,6 +59,18 @@ window.PortfolioData = {
 	],
 
     editorFields: [
+        {
+			key: "subheading",
+			label: "小標",
+			type: "text",
+			inputId: "subheadingInput",
+			sizeInputId: "subheadingSizeInput",
+			hasColor: true,
+			hasSize: true,
+			defaultSize: 22,
+			minSize: 0,
+			maxSize: 999
+		},
 		{
 			key: "name",
 			label: "姓名",

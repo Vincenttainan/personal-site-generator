@@ -108,7 +108,7 @@ const nameInput = document.getElementById("nameInput");
 const titleInput = document.getElementById("titleInput");
 const introInput = document.getElementById("introInput");
 const skillsInput = document.getElementById("skillsInput");
-
+const subheadingInput = document.getElementById("subheadingInput");
 const downloadBtn = document.getElementById("downloadBtn");
 
 const avatarPreview = document.getElementById("avatarPreview");
@@ -116,6 +116,7 @@ const namePreview = document.getElementById("namePreview");
 const titlePreview = document.getElementById("titlePreview");
 const introPreview = document.getElementById("introPreview");
 const skillsPreview = document.getElementById("skillsPreview");
+const subheadingPreview = document.getElementById("subheadingPreview");
 
 const previewArea = document.querySelector(".preview-area");
 const profileCard = document.querySelector(".profile-card");
@@ -135,6 +136,7 @@ const nameSizeInput = document.getElementById("nameSizeInput");
 const titleSizeInput = document.getElementById("titleSizeInput");
 const introSizeInput = document.getElementById("introSizeInput");
 const skillsSizeInput = document.getElementById("skillsSizeInput");
+const subheadingSizeInput = document.getElementById("subheadingSizeInput");
 
 const sizeInputs = document.querySelectorAll(".size-input");
 const sizeMinusButtons = document.querySelectorAll(".size-minus");
@@ -142,14 +144,10 @@ const sizePlusButtons = document.querySelectorAll(".size-plus");
 
 let currentColorTarget = null;
 
-nameInput.value = defaultProfile.name;
-titleInput.value = defaultProfile.title;
-introInput.value = defaultProfile.intro;
-skillsInput.value = defaultProfile.skills;
-
 function renderPreview() {
 	const name = nameInput.value.trim();
 	const title = titleInput.value.trim();
+	const subheading = subheadingInput.value.trim();
 	const intro = introInput.value.trim();
 
 	namePreview.style.fontSize = `${fontSizeState.name}px`;
@@ -163,6 +161,7 @@ function renderPreview() {
 
 	namePreview.textContent = name || "你的姓名";
 	titlePreview.textContent = title || "你的身分 / 標題";
+	subheadingPreview.textContent = subheading || "這裡會顯示小標。";
 	introPreview.textContent = intro || "這裡會顯示你的自我介紹。";
 
 	avatarPreview.textContent = name ? name[0] : "你";
@@ -184,10 +183,12 @@ function renderPreview() {
 	namePreview.style.color = colorState.name;
 	titlePreview.style.color = colorState.title;
 	introPreview.style.color = colorState.intro;
+	subheadingPreview.style.color = colorState.subheading;
 
 	namePreview.style.fontSize = `${fontSizeState.name}px`;
 	titlePreview.style.fontSize = `${fontSizeState.title}px`;
 	introPreview.style.fontSize = `${fontSizeState.intro}px`;
+	subheadingPreview.style.fontSize = `${fontSizeState.subheading}px`;
 
 	document.querySelectorAll("#skillsPreview span").forEach(skillTag => {
 		skillTag.style.color = colorState.skills;
@@ -204,6 +205,7 @@ function renderPreview() {
 function updateFontSizeInputs() {
 	nameSizeInput.value = fontSizeState.name;
 	titleSizeInput.value = fontSizeState.title;
+	subheadingSizeInput.value = fontSizeState.subheading;
 	introSizeInput.value = fontSizeState.intro;
 	skillsSizeInput.value = fontSizeState.skills;
 }
@@ -418,6 +420,7 @@ document.addEventListener("mouseup", () => {
 /* 基本資料即時同步 */
 nameInput.addEventListener("input", renderPreview);
 titleInput.addEventListener("input", renderPreview);
+subheadingInput.addEventListener("input", renderPreview);
 introInput.addEventListener("input", renderPreview);
 skillsInput.addEventListener("input", renderPreview);
 
@@ -425,6 +428,7 @@ skillsInput.addEventListener("input", renderPreview);
 function generateZipFile() {
 	const name = nameInput.value.trim() || "你的姓名";
 	const title = titleInput.value.trim() || "你的身分 / 標題";
+	const subheading = subheadingInput.value.trim() || "這裡會顯示小標。";
 	const intro = introInput.value.trim() || "這裡會顯示你的自我介紹。";
 
 	const skills = skillsInput.value
@@ -459,6 +463,8 @@ function generateZipFile() {
 				<h1 style="color: ${colorState.name}; font-size: ${fontSizeState.name}px;">${name}</h1>
 
 				<h2 style="color: ${colorState.title}; font-size: ${fontSizeState.title}px;">${title}</h2>
+
+				<p class="subheading" style="color: ${colorState.subheading}; font-size: ${fontSizeState.subheading}px;">${subheading}</p>
 
 				<p class="intro" style="color: ${colorState.intro}; font-size: ${fontSizeState.intro}px;">${intro}</p>
 
@@ -537,9 +543,16 @@ body {
 }
 
 .profile-content h2 {
-	margin: 12px 0 20px;
+	margin: 12px 0 10px;
 	font-size: 24px;
 	font-weight: 500;
+}
+
+.subheading {
+	margin: 0 0 20px;
+	font-size: 12px;
+	color: #777;
+	letter-spacing: 1px;
 }
 
 .intro {
