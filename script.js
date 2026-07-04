@@ -140,31 +140,31 @@ function createAvatarControls() {
 						</div>
 					</div>
 
+					<div class="control-row">
+						<div class="control-item">
+							<span>頭像大小</span>
+
+							<div class="stepper">
+								<button type="button" class="avatar-size-minus" data-target="size">-</button>
+
+								<input 
+									type="number"
+									class="size-value size-input avatar-size-input"
+									id="avatarSizeInput"
+									data-target="size"
+									value="${avatarState.size}"
+									min="${avatarSizeLimit.size.min}"
+									max="${avatarSizeLimit.size.max}"
+								/>
+
+								<button type="button" class="avatar-size-plus" data-target="size">+</button>
+							</div>
+						</div>
+					</div>
+
 					<div class="avatar-control-section" id="avatarPhotoControls">
 						<label for="avatarImageInput">上傳照片</label>
 						<input type="file" id="avatarImageInput" accept="image/*">
-
-						<div class="control-row">
-							<div class="control-item">
-								<span>照片大小</span>
-
-								<div class="stepper">
-									<button type="button" class="avatar-size-minus" data-target="size">-</button>
-
-									<input 
-										type="number"
-										class="size-value size-input avatar-size-input"
-										id="avatarSizeInput"
-										data-target="size"
-										value="${avatarState.size}"
-										min="${avatarSizeLimit.size.min}"
-										max="${avatarSizeLimit.size.max}"
-									/>
-
-									<button type="button" class="avatar-size-plus" data-target="size">+</button>
-								</div>
-							</div>
-						</div>
 					</div>
 
 					<div class="avatar-control-section" id="avatarInitialControls">
@@ -244,6 +244,7 @@ const profileCard = document.querySelector(".profile-card");
 
 avatarModeInput.addEventListener("change", () => {
 	avatarState.mode = avatarModeInput.value;
+	updateAvatarControlsVisibility();
 	renderPreview();
 });
 
@@ -251,6 +252,16 @@ avatarImageInput.addEventListener("change", () => {
 	const file = avatarImageInput.files[0];
 
 	if (!file) return;
+
+	avatarFileBlob = file;
+
+	if (file.type === "image/jpeg") {
+		avatarFileExtension = "jpg";
+	} else if (file.type === "image/webp") {
+		avatarFileExtension = "webp";
+	} else {
+		avatarFileExtension = "png";
+	}
 
 	const reader = new FileReader();
 
@@ -383,6 +394,21 @@ const sizePlusButtons = document.querySelectorAll(".size-plus");
 
 let currentColorTarget = null;
 
+let avatarFileBlob = null;
+let avatarFileExtension = "png";
+
+function updateAvatarControlsVisibility() {
+	if (!avatarPhotoControls || !avatarInitialControls) return;
+
+	if (avatarState.mode === "photo") {
+		avatarPhotoControls.style.display = "block";
+		avatarInitialControls.style.display = "none";
+	} else {
+		avatarPhotoControls.style.display = "none";
+		avatarInitialControls.style.display = "block";
+	}
+}
+
 function renderAvatar(name) {
 	avatarPreview.innerHTML = "";
 
@@ -415,15 +441,7 @@ function renderAvatar(name) {
 		avatarFontSizeInput.value = avatarState.fontSize;
 	}
 
-	if (avatarPhotoControls && avatarInitialControls) {
-		if (avatarState.mode === "photo") {
-			avatarPhotoControls.style.display = "block";
-			avatarInitialControls.style.display = "none";
-		} else {
-			avatarPhotoControls.style.display = "none";
-			avatarInitialControls.style.display = "block";
-		}
-	}
+	updateAvatarControlsVisibility();
 }
 
 function renderPreview() {
@@ -735,9 +753,15 @@ function generateZipFile() {
 
 	const avatarText = name ? name[0] : "你";
 
-	const avatarHTML = avatarState.mode === "photo" && avatarState.imageData
-		? `<div class="avatar"><img class="avatar-img" src="${avatarState.imageData}" alt="avatar"></div>`
-		: `<div class="avatar" style="background: ${avatarState.backgroundColor}; color: ${avatarState.textColor}; font-size: ${avatarState.fontSize}px;">${avatarText}</div>`;
+	const avatarFileName = `avatar.${avatarFileExtension}`;
+
+	const avatarHTML = avatarState.mode === "photo" && avatarFileBlob
+		? `<img class="avatar-img" src="${avatarFileName}" alt="avatar">`
+		: `${avatarText}`;
+
+	const avatarStyle = avatarState.mode === "photo" && avatarFileBlob
+		? ``
+		: `style="background: ${avatarState.backgroundColor}; color: ${avatarState.textColor}; font-size: ${avatarState.fontSize}px;"`;
 
 	const skillHTML = skills.length > 0
 		? skills.map(skill => `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer}; font-size: ${fontSizeState.skills}px;">${skill}</span>`).join("\n\t\t\t\t\t")
@@ -756,7 +780,7 @@ function generateZipFile() {
 
 	<main class="page">
 		<section class="profile-card">
-			<div class="avatar">${avatarHTML}</div>
+			<div class="avatar" ${avatarStyle}>${avatarHTML}</div>
 
 			<div class="profile-content">
 				<p class="subheading" style="color: ${colorState.subheading}; font-size: ${fontSizeState.subheading}px;">${subheading}</p>
@@ -907,6 +931,10 @@ body {
 	zip.file("style.css", cssContent);
 	zip.file("script.js", jsContent);
 
+	if (avatarState.mode === "photo" && avatarFileBlob) {
+		zip.file(avatarFileName, avatarFileBlob);
+	}
+
 	zip.generateAsync({ type: "blob" }).then(function(content) {
 		const url = URL.createObjectURL(content);
 
@@ -924,4 +952,5 @@ downloadBtn.addEventListener("click", generateZipFile);
 setupAccordionFlash();
 
 createColorGrid();
+updateAvatarControlsVisibility();
 renderPreview();
