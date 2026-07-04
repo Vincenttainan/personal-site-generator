@@ -289,6 +289,52 @@ textarea {
 	font-size: 14px;
 }
 
+/* 折疊式編輯面板 */
+
+.editor-accordion {
+	border: 1px solid #e5e7eb;
+	border-radius: 16px;
+	background: #ffffff;
+	overflow: hidden;
+}
+
+.accordion-title {
+	list-style: none;
+	cursor: pointer;
+	padding: 14px 16px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-weight: 700;
+	user-select: none;
+	background: #f8fafc;
+	transition: 0.2s;
+}
+
+.accordion-title:hover {
+	background: #f1f3f5;
+}
+
+.accordion-title::-webkit-details-marker {
+	display: none;
+}
+
+.accordion-icon {
+	font-size: 18px;
+	font-weight: 700;
+	color: #555;
+	transition: 0.2s;
+}
+
+.editor-accordion[open] .accordion-icon {
+	transform: rotate(45deg);
+}
+
+.accordion-content {
+	padding: 14px 16px 16px;
+	border-top: 1px solid #e5e7eb;
+}
+
 /* 欄位標題列 + 調色按鈕 */
 
 .label-row {

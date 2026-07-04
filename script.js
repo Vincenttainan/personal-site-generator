@@ -14,16 +14,23 @@ function createGlobalControls() {
 
 	container.innerHTML = `
 		<div class="form-group">
-			<label>主體調整</label>
+			<details class="editor-accordion">
+				<summary class="accordion-title">
+					<span>主體調整</span>
+					<span class="accordion-icon">＋</span>
+				</summary>
 
-			<div class="control-row">
-				${globalControls.map(control => `
-					<div class="control-item">
-						<span>${control.label}</span>
-						<button class="color-btn" data-target="${control.key}">🎨</button>
+				<div class="accordion-content">
+					<div class="control-row">
+						${globalControls.map(control => `
+							<div class="control-item">
+								<span>${control.label}</span>
+								<button type="button" class="color-btn" data-target="${control.key}">🎨</button>
+							</div>
+						`).join("")}
 					</div>
-				`).join("")}
-			</div>
+				</div>
+			</details>
 		</div>
 	`;
 }
@@ -42,7 +49,7 @@ function createEditorFields() {
 			? `
 				<div class="control-item">
 					<span>顏色</span>
-					<button class="color-btn" data-target="${field.key}">🎨</button>
+					<button type="button" class="color-btn" data-target="${field.key}">🎨</button>
 				</div>
 			`
 			: "";
@@ -51,7 +58,7 @@ function createEditorFields() {
 			? `
 				<div class="control-item">
 					<span>外框顏色</span>
-					<button class="color-btn" data-target="${field.key}_outer">🎨</button>
+					<button type="button" class="color-btn" data-target="${field.key}_outer">🎨</button>
 				</div>
 			`
 			: "";
@@ -59,10 +66,10 @@ function createEditorFields() {
 		const sizeControl = field.hasSize
 			? `
 				<div class="control-item">
-					<span>大小</span>
+					<span>字體大小</span>
 
 					<div class="stepper">
-						<button class="size-minus" data-target="${field.key}">-</button>
+						<button type="button" class="size-minus" data-target="${field.key}">-</button>
 
 						<input 
 							type="number"
@@ -74,7 +81,7 @@ function createEditorFields() {
 							max="${field.maxSize}"
 						/>
 
-						<button class="size-plus" data-target="${field.key}">+</button>
+						<button type="button" class="size-plus" data-target="${field.key}">+</button>
 					</div>
 				</div>
 			`
@@ -86,16 +93,23 @@ function createEditorFields() {
 
 		return `
 			<div class="form-group">
-				<label for="${field.inputId}">${field.label}</label>
+				<details class="editor-accordion">
+					<summary class="accordion-title">
+						<span>${field.label}</span>
+						<span class="accordion-icon">＋</span>
+					</summary>
 
-				<div class="control-row">
-					${colorControl}
-					${outerColorControl}
-					${sizeControl}
-				</div>
+					<div class="accordion-content">
+						<div class="control-row">
+							${colorControl}
+							${outerColorControl}
+							${sizeControl}
+						</div>
 
-				${inputHTML}
-				${helpText}
+						${inputHTML}
+						${helpText}
+					</div>
+				</details>
 			</div>
 		`;
 	}).join("");
@@ -458,13 +472,11 @@ function generateZipFile() {
 			<div class="avatar">${avatarText}</div>
 
 			<div class="profile-content">
-				<p class="label">Personal Portfolio</p>
+				<p class="subheading" style="color: ${colorState.subheading}; font-size: ${fontSizeState.subheading}px;">${subheading}</p>
 
 				<h1 style="color: ${colorState.name}; font-size: ${fontSizeState.name}px;">${name}</h1>
 
 				<h2 style="color: ${colorState.title}; font-size: ${fontSizeState.title}px;">${title}</h2>
-
-				<p class="subheading" style="color: ${colorState.subheading}; font-size: ${fontSizeState.subheading}px;">${subheading}</p>
 
 				<p class="intro" style="color: ${colorState.intro}; font-size: ${fontSizeState.intro}px;">${intro}</p>
 
