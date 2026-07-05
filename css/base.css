@@ -1,0 +1,14 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: "Noto Sans TC", Arial, sans-serif;
+	background: #f4f6f8;
+	color: #222;
+}
+
+textarea {
+	resize: vertical;
+}
