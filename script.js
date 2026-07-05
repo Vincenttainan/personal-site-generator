@@ -11,6 +11,8 @@ const {
 	colorArray
 } = window.PortfolioData;
 
+const templates = window.PortfolioTemplates || [];
+
 function createGlobalControls() {
 	const container = document.getElementById("globalControlsContainer");
 
@@ -35,6 +37,45 @@ function createGlobalControls() {
 			</details>
 		</div>
 	`;
+}
+
+function createTemplateControls() {
+	const globalContainer = document.getElementById("globalControlsContainer");
+
+	const templateHTML = `
+		<div class="form-group">
+			<details class="editor-accordion" data-flash-target="previewArea">
+				<summary class="accordion-title">
+					<span>模板套用</span>
+					<span class="accordion-icon">＋</span>
+				</summary>
+
+				<div class="accordion-content">
+					<div class="template-grid">
+						${templates.map(template => `
+							<button 
+								type="button" 
+								class="template-btn" 
+								data-template-id="${template.id}"
+							>
+								<span class="template-name">${template.name}</span>
+								<span class="template-desc">${template.description}</span>
+
+								<span class="template-colors">
+									<span style="background: ${template.colors.background};"></span>
+									<span style="background: ${template.colors.card};"></span>
+									<span style="background: ${template.colors.name};"></span>
+									<span style="background: ${template.colors.skills_outer};"></span>
+								</span>
+							</button>
+						`).join("")}
+					</div>
+				</div>
+			</details>
+		</div>
+	`;
+
+	globalContainer.insertAdjacentHTML("beforebegin", templateHTML);
 }
 
 function createEditorFields() {
@@ -210,6 +251,7 @@ function createAvatarControls() {
 	container.insertAdjacentHTML("afterbegin", avatarControlHTML);
 }
 
+createTemplateControls();
 createGlobalControls();
 createEditorFields();
 createAvatarControls();
@@ -241,6 +283,65 @@ const avatarSizePlusButtons = document.querySelectorAll(".avatar-size-plus");
 
 const previewArea = document.querySelector(".preview-area");
 const profileCard = document.querySelector(".profile-card");
+
+const templateButtons = document.querySelectorAll(".template-btn");
+
+function applyTemplate(templateId) {
+	const template = templates.find(item => item.id === templateId);
+
+	if (!template) return;
+
+	if (template.colors) {
+		Object.keys(template.colors).forEach(key => {
+			if (colorState[key] !== undefined) {
+				colorState[key] = template.colors[key];
+			}
+		});
+	}
+
+	if (template.fontSizes) {
+		Object.keys(template.fontSizes).forEach(key => {
+			if (fontSizeState[key] !== undefined) {
+				fontSizeState[key] = template.fontSizes[key];
+			}
+		});
+	}
+
+	if (template.avatar) {
+		if (template.avatar.size !== undefined) {
+			avatarState.size = template.avatar.size;
+		}
+
+		if (template.avatar.backgroundColor !== undefined) {
+			avatarState.backgroundColor = template.avatar.backgroundColor;
+		}
+
+		if (template.avatar.textColor !== undefined) {
+			avatarState.textColor = template.avatar.textColor;
+		}
+
+		if (template.avatar.fontSize !== undefined) {
+			avatarState.fontSize = template.avatar.fontSize;
+		}
+	}
+
+	document.querySelectorAll(".template-btn").forEach(button => {
+		if (button.dataset.templateId === templateId) {
+			button.classList.add("active");
+		} else {
+			button.classList.remove("active");
+		}
+	});
+
+	renderPreview();
+}
+
+templateButtons.forEach(button => {
+	button.addEventListener("click", () => {
+		const templateId = button.dataset.templateId;
+		applyTemplate(templateId);
+	});
+});
 
 avatarModeInput.addEventListener("change", () => {
 	avatarState.mode = avatarModeInput.value;
