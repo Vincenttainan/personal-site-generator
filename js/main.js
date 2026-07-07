@@ -7,6 +7,11 @@ function cacheElements() {
 		skillsInput: document.getElementById("skillsInput"),
 		downloadBtn: document.getElementById("downloadBtn"),
 
+		saveProjectBtn: document.getElementById("saveProjectBtn"),
+		loadProjectBtn: document.getElementById("loadProjectBtn"),
+		clearProjectBtn: document.getElementById("clearProjectBtn"),
+		storageMessage: document.getElementById("storageMessage"),
+
 		avatarPreview: document.getElementById("avatarPreview"),
 		namePreview: document.getElementById("namePreview"),
 		titlePreview: document.getElementById("titlePreview"),
@@ -65,6 +70,7 @@ function bindBasicInputEvents() {
 }
 
 function initApp() {
+	createStorageControls();
 	createTemplateControls();
 	createGlobalControls();
 	createEditorFields();
@@ -72,6 +78,7 @@ function initApp() {
 
 	cacheElements();
 
+	bindStorageEvents();
 	bindTemplateEvents();
 	bindAvatarEvents();
 	bindColorModalEvents();

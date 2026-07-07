@@ -235,3 +235,48 @@
 	border-radius: 50%;
 	border: 1px solid rgba(0, 0, 0, 0.12);
 }
+
+.storage-actions {
+	display: grid;
+	gap: 10px;
+}
+
+.storage-btn {
+	width: 100%;
+	border: none;
+	border-radius: 14px;
+	padding: 10px 12px;
+	background: #222;
+	color: white;
+	font-size: 14px;
+	font-family: inherit;
+	cursor: pointer;
+	transition: 0.2s;
+}
+
+.storage-btn:hover {
+	background: #444;
+	transform: translateY(-1px);
+}
+
+.storage-btn.danger {
+	background: #ef4444;
+}
+
+.storage-btn.danger:hover {
+	background: #dc2626;
+}
+
+.storage-message {
+	margin: 10px 0 0;
+	font-size: 13px;
+	color: #16a34a;
+	opacity: 0;
+	transform: translateY(-4px);
+	transition: 0.2s;
+}
+
+.storage-message.active {
+	opacity: 1;
+	transform: translateY(0);
+}

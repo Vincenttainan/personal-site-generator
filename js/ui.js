@@ -63,6 +63,35 @@ function createTemplateControls() {
 	globalContainer.insertAdjacentHTML("beforebegin", templateHTML);
 }
 
+function createStorageControls() {
+	const editorPanel = document.querySelector(".editor-panel");
+
+	const storageHTML = `
+		<div class="form-group">
+			<details class="editor-accordion" open>
+				<summary class="accordion-title">
+					<span>設定管理</span>
+					<span class="accordion-icon">＋</span>
+				</summary>
+
+				<div class="accordion-content">
+					<div class="storage-actions">
+						<button type="button" id="saveProjectBtn" class="storage-btn">儲存目前設定</button>
+						<button type="button" id="loadProjectBtn" class="storage-btn">載入儲存設定</button>
+						<button type="button" id="clearProjectBtn" class="storage-btn danger">清除儲存設定</button>
+					</div>
+
+					<p id="storageMessage" class="storage-message"></p>
+				</div>
+			</details>
+		</div>
+	`;
+
+	const firstContainer = document.getElementById("globalControlsContainer");
+
+	firstContainer.insertAdjacentHTML("beforebegin", storageHTML);
+}
+
 function createEditorFields() {
 	const container = document.getElementById("editorFieldsContainer");
 

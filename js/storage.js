@@ -1,0 +1,160 @@
+const STORAGE_KEY = "personalSiteGeneratorProject";
+
+function getCurrentProjectData() {
+	const {
+		nameInput,
+		titleInput,
+		subheadingInput,
+		introInput,
+		skillsInput
+	} = App.elements;
+
+	return {
+		profile: {
+			name: nameInput.value,
+			title: titleInput.value,
+			subheading: subheadingInput.value,
+			intro: introInput.value,
+			skills: skillsInput.value
+		},
+		colors: {
+			...colorState
+		},
+		fontSizes: {
+			...fontSizeState
+		},
+		avatar: {
+			mode: avatarState.mode,
+			imageData: avatarState.imageData,
+			size: avatarState.size,
+			backgroundColor: avatarState.backgroundColor,
+			textColor: avatarState.textColor,
+			fontSize: avatarState.fontSize
+		}
+	};
+}
+
+function saveCurrentProject() {
+	const projectData = getCurrentProjectData();
+
+	localStorage.setItem(STORAGE_KEY, JSON.stringify(projectData));
+
+	showStorageMessage("已儲存目前設定");
+}
+
+function applyProjectData(projectData) {
+	if (!projectData) return;
+
+	const {
+		nameInput,
+		titleInput,
+		subheadingInput,
+		introInput,
+		skillsInput
+	} = App.elements;
+
+	if (projectData.profile) {
+		nameInput.value = projectData.profile.name ?? "";
+		titleInput.value = projectData.profile.title ?? "";
+		subheadingInput.value = projectData.profile.subheading ?? "";
+		introInput.value = projectData.profile.intro ?? "";
+		skillsInput.value = projectData.profile.skills ?? "";
+	}
+
+	if (projectData.colors) {
+		Object.keys(projectData.colors).forEach(key => {
+			if (colorState[key] !== undefined) {
+				colorState[key] = projectData.colors[key];
+			}
+		});
+	}
+
+	if (projectData.fontSizes) {
+		Object.keys(projectData.fontSizes).forEach(key => {
+			if (fontSizeState[key] !== undefined) {
+				fontSizeState[key] = projectData.fontSizes[key];
+			}
+		});
+	}
+
+	if (projectData.avatar) {
+		if (projectData.avatar.mode !== undefined) {
+			avatarState.mode = projectData.avatar.mode;
+		}
+
+		if (projectData.avatar.imageData !== undefined) {
+			avatarState.imageData = projectData.avatar.imageData;
+		}
+
+		if (projectData.avatar.size !== undefined) {
+			avatarState.size = projectData.avatar.size;
+		}
+
+		if (projectData.avatar.backgroundColor !== undefined) {
+			avatarState.backgroundColor = projectData.avatar.backgroundColor;
+		}
+
+		if (projectData.avatar.textColor !== undefined) {
+			avatarState.textColor = projectData.avatar.textColor;
+		}
+
+		if (projectData.avatar.fontSize !== undefined) {
+			avatarState.fontSize = projectData.avatar.fontSize;
+		}
+	}
+
+	renderPreview();
+}
+
+function loadSavedProject() {
+	const savedData = localStorage.getItem(STORAGE_KEY);
+
+	if (!savedData) {
+		showStorageMessage("目前沒有已儲存的設定");
+		return;
+	}
+
+	try {
+		const projectData = JSON.parse(savedData);
+		applyProjectData(projectData);
+		showStorageMessage("已載入儲存設定");
+	} catch (error) {
+		console.error(error);
+		showStorageMessage("載入失敗，儲存資料可能已損壞");
+	}
+}
+
+function clearSavedProject() {
+	const confirmed = confirm("確定要清除已儲存的設定嗎？");
+
+	if (!confirmed) return;
+
+	localStorage.removeItem(STORAGE_KEY);
+
+	showStorageMessage("已清除儲存設定");
+}
+
+function showStorageMessage(message) {
+	const { storageMessage } = App.elements;
+
+	if (!storageMessage) return;
+
+	storageMessage.textContent = message;
+	storageMessage.classList.add("active");
+
+	setTimeout(() => {
+		storageMessage.classList.remove("active");
+	}, 1800);
+}
+
+function bindStorageEvents() {
+	const {
+		saveProjectBtn,
+		loadProjectBtn,
+		clearProjectBtn
+	} = App.elements;
+
+	saveProjectBtn.addEventListener("click", saveCurrentProject);
+	loadProjectBtn.addEventListener("click", loadSavedProject);
+	clearProjectBtn.addEventListener("click", clearSavedProject);
+}
