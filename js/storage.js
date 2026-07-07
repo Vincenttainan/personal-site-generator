@@ -42,6 +42,43 @@ function saveCurrentProject() {
 	showStorageMessage("已儲存目前設定");
 }
 
+function getImageExtensionFromDataUrl(dataUrl) {
+	if (!dataUrl || !dataUrl.startsWith("data:")) return "png";
+
+	const mimeMatch = dataUrl.match(/^data:(.*?);base64,/);
+	const mimeType = mimeMatch ? mimeMatch[1] : "image/png";
+
+	if (mimeType === "image/jpeg") return "jpg";
+	if (mimeType === "image/webp") return "webp";
+	if (mimeType === "image/gif") return "gif";
+
+	return "png";
+}
+
+function dataUrlToBlob(dataUrl) {
+	if (!dataUrl || !dataUrl.startsWith("data:")) return null;
+
+	const parts = dataUrl.split(",");
+
+	if (parts.length !== 2) return null;
+
+	const meta = parts[0];
+	const base64 = parts[1];
+
+	const mimeMatch = meta.match(/data:(.*?);base64/);
+	const mimeType = mimeMatch ? mimeMatch[1] : "image/png";
+
+	const binaryString = atob(base64);
+	const length = binaryString.length;
+	const bytes = new Uint8Array(length);
+
+	for (let i = 0; i < length; i++) {
+		bytes[i] = binaryString.charCodeAt(i);
+	}
+
+	return new Blob([bytes], { type: mimeType });
+}
+
 function applyProjectData(projectData) {
 	if (!projectData) return;
 
@@ -78,30 +115,38 @@ function applyProjectData(projectData) {
 	}
 
 	if (projectData.avatar) {
-		if (projectData.avatar.mode !== undefined) {
-			avatarState.mode = projectData.avatar.mode;
-		}
+        if (projectData.avatar.mode !== undefined) {
+            avatarState.mode = projectData.avatar.mode;
+        }
 
-		if (projectData.avatar.imageData !== undefined) {
-			avatarState.imageData = projectData.avatar.imageData;
-		}
+        if (projectData.avatar.imageData !== undefined) {
+            avatarState.imageData = projectData.avatar.imageData;
 
-		if (projectData.avatar.size !== undefined) {
-			avatarState.size = projectData.avatar.size;
-		}
+            if (avatarState.imageData) {
+                App.avatarFileBlob = dataUrlToBlob(avatarState.imageData);
+                App.avatarFileExtension = getImageExtensionFromDataUrl(avatarState.imageData);
+            } else {
+                App.avatarFileBlob = null;
+                App.avatarFileExtension = "png";
+            }
+        }
 
-		if (projectData.avatar.backgroundColor !== undefined) {
-			avatarState.backgroundColor = projectData.avatar.backgroundColor;
-		}
+        if (projectData.avatar.size !== undefined) {
+            avatarState.size = projectData.avatar.size;
+        }
 
-		if (projectData.avatar.textColor !== undefined) {
-			avatarState.textColor = projectData.avatar.textColor;
-		}
+        if (projectData.avatar.backgroundColor !== undefined) {
+            avatarState.backgroundColor = projectData.avatar.backgroundColor;
+        }
 
-		if (projectData.avatar.fontSize !== undefined) {
-			avatarState.fontSize = projectData.avatar.fontSize;
-		}
-	}
+        if (projectData.avatar.textColor !== undefined) {
+            avatarState.textColor = projectData.avatar.textColor;
+        }
+
+        if (projectData.avatar.fontSize !== undefined) {
+            avatarState.fontSize = projectData.avatar.fontSize;
+        }
+    }
 
 	renderPreview();
 }

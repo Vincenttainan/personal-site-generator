@@ -18,13 +18,19 @@ function generateZipFile() {
 		.filter(skill => skill !== "");
 
 	const avatarText = name ? name[0] : "你";
+	if (avatarState.mode === "photo" && avatarState.imageData && !App.avatarFileBlob) {
+		App.avatarFileBlob = dataUrlToBlob(avatarState.imageData);
+		App.avatarFileExtension = getImageExtensionFromDataUrl(avatarState.imageData);
+	}
+
+	const hasAvatarImage = avatarState.mode === "photo" && App.avatarFileBlob;
 	const avatarFileName = `avatar.${App.avatarFileExtension}`;
 
-	const avatarHTML = avatarState.mode === "photo" && App.avatarFileBlob
+	const avatarHTML = hasAvatarImage
 		? `<img class="avatar-img" src="${avatarFileName}" alt="avatar">`
 		: `${avatarText}`;
 
-	const avatarStyle = avatarState.mode === "photo" && App.avatarFileBlob
+	const avatarStyle = hasAvatarImage
 		? ``
 		: `style="background: ${avatarState.backgroundColor}; color: ${avatarState.textColor}; font-size: ${avatarState.fontSize}px;"`;
 
