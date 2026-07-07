@@ -6,6 +6,8 @@ function cacheElements() {
 		introInput: document.getElementById("introInput"),
 		skillsInput: document.getElementById("skillsInput"),
 		downloadBtn: document.getElementById("downloadBtn"),
+		downloadFileNameInput: document.getElementById("downloadFileNameInput"),
+		previewWebsiteBtn: document.getElementById("previewWebsiteBtn"),
 
 		saveProjectBtn: document.getElementById("saveProjectBtn"),
 		loadProjectBtn: document.getElementById("loadProjectBtn"),
@@ -58,8 +60,7 @@ function bindBasicInputEvents() {
 		titleInput,
 		subheadingInput,
 		introInput,
-		skillsInput,
-		downloadBtn
+		skillsInput
 	} = App.elements;
 
 	nameInput.addEventListener("input", renderPreview);
@@ -67,8 +68,6 @@ function bindBasicInputEvents() {
 	subheadingInput.addEventListener("input", renderPreview);
 	introInput.addEventListener("input", renderPreview);
 	skillsInput.addEventListener("input", renderPreview);
-
-	downloadBtn.addEventListener("click", generateZipFile);
 }
 
 function initApp() {
@@ -85,6 +84,7 @@ function initApp() {
 	bindAvatarEvents();
 	bindColorModalEvents();
 	bindFontSizeEvents();
+	bindDownloadEvents();
 	bindBasicInputEvents();
 
 	setupAccordionFlash();
