@@ -42,6 +42,54 @@ function saveCurrentProject() {
 	showStorageMessage("已儲存目前設定");
 }
 
+function exportProjectJson() {
+	const projectData = getCurrentProjectData();
+
+	const jsonContent = JSON.stringify(projectData, null, 2);
+	const blob = new Blob([jsonContent], { type: "application/json" });
+	const url = URL.createObjectURL(blob);
+
+	const now = new Date();
+
+	const dateText = [
+		now.getFullYear(),
+		String(now.getMonth() + 1).padStart(2, "0"),
+		String(now.getDate()).padStart(2, "0")
+	].join("-");
+
+	const fileName = `portfolio-project-${dateText}.json`;
+
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = fileName;
+	a.click();
+
+	URL.revokeObjectURL(url);
+
+	showStorageMessage("已匯出 JSON 設定檔");
+}
+
+function importProjectJson(file) {
+	if (!file) return;
+
+	const reader = new FileReader();
+
+	reader.addEventListener("load", () => {
+		try {
+			const projectData = JSON.parse(reader.result);
+
+			applyProjectData(projectData);
+
+			showStorageMessage("已匯入 JSON 設定檔");
+		} catch (error) {
+			console.error(error);
+			showStorageMessage("匯入失敗，JSON 格式錯誤");
+		}
+	});
+
+	reader.readAsText(file);
+}
+
 function getImageExtensionFromDataUrl(dataUrl) {
 	if (!dataUrl || !dataUrl.startsWith("data:")) return "png";
 
@@ -196,10 +244,24 @@ function bindStorageEvents() {
 	const {
 		saveProjectBtn,
 		loadProjectBtn,
-		clearProjectBtn
+		clearProjectBtn,
+		exportJsonBtn,
+		importJsonInput
 	} = App.elements;
 
 	saveProjectBtn.addEventListener("click", saveCurrentProject);
 	loadProjectBtn.addEventListener("click", loadSavedProject);
 	clearProjectBtn.addEventListener("click", clearSavedProject);
+
+	exportJsonBtn.addEventListener("click", exportProjectJson);
+
+	importJsonInput.addEventListener("change", () => {
+		const file = importJsonInput.files[0];
+
+		if (!file) return;
+
+		importProjectJson(file);
+
+		importJsonInput.value = "";
+	});
 }

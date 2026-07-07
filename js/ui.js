@@ -77,6 +77,15 @@ function createStorageControls() {
 						<button type="button" id="saveProjectBtn" class="storage-btn">儲存目前設定</button>
 						<button type="button" id="loadProjectBtn" class="storage-btn">載入儲存設定</button>
 						<button type="button" id="clearProjectBtn" class="storage-btn danger">清除儲存設定</button>
+
+						<hr class="storage-divider">
+
+						<button type="button" id="exportJsonBtn" class="storage-btn secondary">匯出 JSON</button>
+
+						<label for="importJsonInput" class="storage-btn secondary file-label">
+							匯入 JSON
+						</label>
+						<input type="file" id="importJsonInput" accept="application/json,.json" hidden>
 					</div>
 
 					<p id="storageMessage" class="storage-message"></p>

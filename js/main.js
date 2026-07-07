@@ -10,6 +10,8 @@ function cacheElements() {
 		saveProjectBtn: document.getElementById("saveProjectBtn"),
 		loadProjectBtn: document.getElementById("loadProjectBtn"),
 		clearProjectBtn: document.getElementById("clearProjectBtn"),
+		exportJsonBtn: document.getElementById("exportJsonBtn"),
+		importJsonInput: document.getElementById("importJsonInput"),
 		storageMessage: document.getElementById("storageMessage"),
 
 		avatarPreview: document.getElementById("avatarPreview"),
