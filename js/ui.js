@@ -25,11 +25,11 @@ function createGlobalControls() {
 }
 
 function createTemplateControls() {
-	const globalContainer = document.getElementById("globalControlsContainer");
+	const container = document.getElementById("templateControlsContainer");
 
-	const templateHTML = `
+	container.innerHTML = `
 		<div class="form-group">
-			<details class="editor-accordion" data-flash-target="previewArea">
+			<details class="editor-accordion">
 				<summary class="accordion-title">
 					<span>模板套用</span>
 					<span class="accordion-icon">＋</span>
@@ -59,18 +59,16 @@ function createTemplateControls() {
 			</details>
 		</div>
 	`;
-
-	globalContainer.insertAdjacentHTML("beforebegin", templateHTML);
 }
 
 function createStorageControls() {
-	const editorPanel = document.querySelector(".editor-panel");
+	const container = document.getElementById("storageControlsContainer");
 
-	const storageHTML = `
+	container.innerHTML = `
 		<div class="form-group">
 			<details class="editor-accordion" open>
 				<summary class="accordion-title">
-					<span>設定管理</span>
+					<span>資料管理</span>
 					<span class="accordion-icon">＋</span>
 				</summary>
 
@@ -86,10 +84,6 @@ function createStorageControls() {
 			</details>
 		</div>
 	`;
-
-	const firstContainer = document.getElementById("globalControlsContainer");
-
-	firstContainer.insertAdjacentHTML("beforebegin", storageHTML);
 }
 
 function createEditorFields() {
@@ -262,7 +256,7 @@ function createAvatarControls() {
 		</div>
 	`;
 
-	container.insertAdjacentHTML("afterbegin", avatarControlHTML);
+	container.insertAdjacentHTML("beforeend", avatarControlHTML);
 }
 
 function getFlashElement(target) {

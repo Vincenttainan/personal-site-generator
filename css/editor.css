@@ -157,7 +157,7 @@
 	transition: 0.2s;
 }
 
-.editor-accordion[open] .accordion-icon {
+.editor-accordion[open] > .accordion-title > .accordion-icon {
 	transform: rotate(45deg);
 }
 
