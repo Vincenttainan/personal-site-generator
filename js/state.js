@@ -8,6 +8,7 @@ const {
 	fontSizeLimit,
 	avatarState,
 	avatarSizeLimit,
+	contactFields,
 	contactState,
 	colorArray
 } = window.PortfolioData;

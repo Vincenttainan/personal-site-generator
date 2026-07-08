@@ -14,6 +14,24 @@ function getDownloadFileName() {
 	return safeFileName || "portfolio-website";
 }
 
+function generateContactHTML() {
+	const contactLinks = getEnabledContactLinks();
+
+	if (contactLinks.length === 0) return "";
+
+	return `
+				<div class="contact-links">
+					${contactLinks.map(link => {
+						const targetAttr = link.openNewTab
+							? `target="_blank" rel="noopener noreferrer"`
+							: "";
+
+						return `<a class="contact-link" href="${link.href}" ${targetAttr}>${link.label}</a>`;
+					}).join("")}
+				</div>
+	`;
+}
+
 function generatePortfolioHtml() {
 	const {
 		nameInput,
@@ -47,13 +65,7 @@ function generatePortfolioHtml() {
 		? skills.map(skill => `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer}; font-size: ${fontSizeState.skills}px;">${skill}</span>`).join("\n\t\t\t\t\t")
 		: `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer}; font-size: ${fontSizeState.skills}px;">技能</span>`;
 
-	const contactHTML = contactState.emailEnabled && contactState.email
-	? `
-				<div class="contact-links">
-					<a class="contact-link" href="mailto:${contactState.email}">Email</a>
-				</div>
-	`
-	: "";
+	const contactHTML = generateContactHTML();
 
 	return `
 <!DOCTYPE html>
@@ -274,13 +286,7 @@ function generateZipFile() {
 		? skills.map(skill => `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer}; font-size: ${fontSizeState.skills}px;">${skill}</span>`).join("\n\t\t\t\t\t")
 		: `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer}; font-size: ${fontSizeState.skills}px;">技能</span>`;
 
-	const contactHTML = contactState.emailEnabled && contactState.email
-	? `
-				<div class="contact-links">
-					<a class="contact-link" href="mailto:${contactState.email}">Email</a>
-				</div>
-	`
-	: "";
+	const contactHTML = generateContactHTML();
 	
 	const htmlContent = `
 <!DOCTYPE html>

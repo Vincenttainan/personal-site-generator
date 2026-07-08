@@ -367,3 +367,15 @@
 .switch input:checked + .switch-slider::before {
 	transform: translateX(22px);
 }
+
+.contact-item {
+	padding-bottom: 14px;
+	margin-bottom: 14px;
+	border-bottom: 1px solid #e5e7eb;
+}
+
+.contact-item:last-child {
+	padding-bottom: 0;
+	margin-bottom: 0;
+	border-bottom: none;
+}

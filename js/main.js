@@ -32,10 +32,6 @@ function cacheElements() {
 		avatarPhotoControls: document.getElementById("avatarPhotoControls"),
 		avatarInitialControls: document.getElementById("avatarInitialControls"),
 
-		emailEnabledInput: document.getElementById("emailEnabledInput"),
-		emailInput: document.getElementById("emailInput"),
-		emailControls: document.getElementById("emailControls"),
-
 		avatarSizeInputs: document.querySelectorAll(".avatar-size-input"),
 		avatarSizeMinusButtons: document.querySelectorAll(".avatar-size-minus"),
 		avatarSizePlusButtons: document.querySelectorAll(".avatar-size-plus"),

@@ -280,32 +280,48 @@ function createContactControls() {
 				</summary>
 
 				<div class="accordion-content">
-					<div class="control-row">
-						<div class="control-item">
-							<span>顯示 Email</span>
-
-							<label class="switch">
-								<input 
-									type="checkbox" 
-									id="emailEnabledInput"
-									${contactState.emailEnabled ? "checked" : ""}
-								>
-								<span class="switch-slider"></span>
-							</label>
-						</div>
-					</div>
-
-					<div class="contact-control-section" id="emailControls">
-						<label for="emailInput">Email</label>
-						<input 
-							type="email" 
-							id="emailInput" 
-							placeholder="example@gmail.com"
-							value="${contactState.email}"
-						>
-					</div>
+					${contactFields.map(field => createContactItemHTML(field)).join("")}
 				</div>
 			</details>
+		</div>
+	`;
+}
+
+function createContactItemHTML(field) {
+	const state = contactState[field.key] || {
+		enabled: false,
+		value: ""
+	};
+
+	return `
+		<div class="contact-item">
+			<div class="control-row">
+				<div class="control-item">
+					<span>顯示 ${field.label}</span>
+
+					<label class="switch">
+						<input 
+							type="checkbox" 
+							class="contact-enabled-input"
+							data-contact-key="${field.key}"
+							${state.enabled ? "checked" : ""}
+						>
+						<span class="switch-slider"></span>
+					</label>
+				</div>
+			</div>
+
+			<div class="contact-control-section" data-contact-section="${field.key}">
+				<label for="contactInput_${field.key}">${field.label}</label>
+				<input 
+					type="${field.type}" 
+					id="contactInput_${field.key}" 
+					class="contact-value-input"
+					data-contact-key="${field.key}"
+					placeholder="${field.placeholder}"
+					value="${state.value}"
+				>
+			</div>
 		</div>
 	`;
 }

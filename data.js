@@ -47,9 +47,58 @@ window.PortfolioData = {
 		skills: { min: 0, max: 999 }
 	},
 
+	contactFields: [
+		{
+			key: "email",
+			label: "Email",
+			type: "email",
+			placeholder: "example@gmail.com",
+			hrefPrefix: "mailto:",
+			openNewTab: false
+		},
+		{
+			key: "github",
+			label: "GitHub",
+			type: "url",
+			placeholder: "https://github.com/username",
+			hrefPrefix: "",
+			openNewTab: true
+		},
+		{
+			key: "linkedin",
+			label: "LinkedIn",
+			type: "url",
+			placeholder: "https://linkedin.com/in/username",
+			hrefPrefix: "",
+			openNewTab: true
+		},
+		{
+			key: "website",
+			label: "個人網站",
+			type: "url",
+			placeholder: "https://example.com",
+			hrefPrefix: "",
+			openNewTab: true
+		}
+	],
+
 	contactState: {
-		emailEnabled: false,
-		email: ""
+		email: {
+			enabled: false,
+			value: ""
+		},
+		github: {
+			enabled: false,
+			value: ""
+		},
+		linkedin: {
+			enabled: false,
+			value: ""
+		},
+		website: {
+			enabled: false,
+			value: ""
+		}
 	},
 
 	avatarState: {

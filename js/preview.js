@@ -69,15 +69,22 @@ function renderContactLinks() {
 
 	contactLinksPreview.innerHTML = "";
 
-	if (!contactState.emailEnabled) return;
-	if (!contactState.email) return;
+	const links = getEnabledContactLinks();
 
-	const emailLink = document.createElement("a");
-	emailLink.href = `mailto:${contactState.email}`;
-	emailLink.textContent = "Email";
-	emailLink.className = "contact-link";
+	links.forEach(link => {
+		const anchor = document.createElement("a");
 
-	contactLinksPreview.appendChild(emailLink);
+		anchor.href = link.href;
+		anchor.textContent = link.label;
+		anchor.className = "contact-link";
+
+		if (link.openNewTab) {
+			anchor.target = "_blank";
+			anchor.rel = "noopener noreferrer";
+		}
+
+		contactLinksPreview.appendChild(anchor);
+	});
 }
 
 function renderPreview() {

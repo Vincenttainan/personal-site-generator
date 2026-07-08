@@ -31,10 +31,7 @@ function getCurrentProjectData() {
 			textColor: avatarState.textColor,
 			fontSize: avatarState.fontSize
 		},
-		contact: {
-			emailEnabled: contactState.emailEnabled,
-			email: contactState.email
-		}
+		contact: JSON.parse(JSON.stringify(contactState))
 	};
 }
 
@@ -200,26 +197,37 @@ function applyProjectData(projectData) {
         }
     }
 	if (projectData.contact) {
-		if (projectData.contact.emailEnabled !== undefined) {
-			contactState.emailEnabled = projectData.contact.emailEnabled;
-		}
+		Object.keys(projectData.contact).forEach(key => {
+			if (!contactState[key]) return;
 
-		if (projectData.contact.email !== undefined) {
-			contactState.email = projectData.contact.email;
-		}
+			// 支援新版格式：contact.email.enabled / contact.email.value
+			if (typeof projectData.contact[key] === "object") {
+				contactState[key].enabled = projectData.contact[key].enabled ?? false;
+				contactState[key].value = projectData.contact[key].value ?? "";
+			}
+		});
 
-		const {
-			emailEnabledInput,
-			emailInput
-		} = App.elements;
+		contactFields.forEach(field => {
+			const state = contactState[field.key];
 
-		if (emailEnabledInput) {
-			emailEnabledInput.checked = contactState.emailEnabled;
-		}
+			if (!state) return;
 
-		if (emailInput) {
-			emailInput.value = contactState.email;
-		}
+			const enabledInput = document.querySelector(
+				`.contact-enabled-input[data-contact-key="${field.key}"]`
+			);
+
+			const valueInput = document.querySelector(
+				`.contact-value-input[data-contact-key="${field.key}"]`
+			);
+
+			if (enabledInput) {
+				enabledInput.checked = state.enabled;
+			}
+
+			if (valueInput) {
+				valueInput.value = state.value;
+			}
+		});
 
 		updateContactControlsVisibility();
 	}
