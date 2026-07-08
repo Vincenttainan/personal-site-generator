@@ -184,6 +184,12 @@
 	animation: previewFlash 0.65s ease;
 }
 
+.download-name-label {
+	font-size: 14px;
+	color: #555;
+	white-space: nowrap;
+}
+
 @keyframes previewFlash {
 	0% {
 		box-shadow: 0 0 0 0 rgba(255, 214, 102, 0);

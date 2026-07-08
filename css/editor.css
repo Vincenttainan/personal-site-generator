@@ -8,6 +8,12 @@
 	font-weight: 700;
 }
 
+.control-item .switch {
+	display: inline-block;
+	margin-bottom: 0;
+	font-weight: 400;
+}
+
 .form-group input,
 .form-group textarea {
 	width: 100%;
@@ -316,4 +322,48 @@
 
 .contact-control-section {
 	margin-top: 12px;
+}
+
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 48px;
+	height: 26px;
+	margin-bottom: 0;
+}
+
+.switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.switch-slider {
+	position: absolute;
+	cursor: pointer;
+	inset: 0;
+	background: #d1d5db;
+	border-radius: 999px;
+	transition: 0.2s;
+}
+
+.switch-slider::before {
+	content: "";
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	left: 3px;
+	top: 3px;
+	background: white;
+	border-radius: 50%;
+	transition: 0.2s;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.switch input:checked + .switch-slider {
+	background: #222;
+}
+
+.switch input:checked + .switch-slider::before {
+	transform: translateX(22px);
 }

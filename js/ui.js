@@ -284,10 +284,14 @@ function createContactControls() {
 						<div class="control-item">
 							<span>顯示 Email</span>
 
-							<select id="emailEnabledInput" class="small-select">
-								<option value="false">關閉</option>
-								<option value="true">打開</option>
-							</select>
+							<label class="switch">
+								<input 
+									type="checkbox" 
+									id="emailEnabledInput"
+									${contactState.emailEnabled ? "checked" : ""}
+								>
+								<span class="switch-slider"></span>
+							</label>
 						</div>
 					</div>
 

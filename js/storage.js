@@ -214,7 +214,7 @@ function applyProjectData(projectData) {
 		} = App.elements;
 
 		if (emailEnabledInput) {
-			emailEnabledInput.value = String(contactState.emailEnabled);
+			emailEnabledInput.checked = contactState.emailEnabled;
 		}
 
 		if (emailInput) {

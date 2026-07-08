@@ -6,7 +6,7 @@ function updateContactControlsVisibility() {
 
 	if (!emailControls || !emailEnabledInput) return;
 
-	emailEnabledInput.value = String(contactState.emailEnabled);
+	emailEnabledInput.checked = contactState.emailEnabled;
 
 	if (contactState.emailEnabled) {
 		emailControls.style.display = "block";
@@ -22,7 +22,7 @@ function bindContactEvents() {
 	} = App.elements;
 
 	emailEnabledInput.addEventListener("change", () => {
-		contactState.emailEnabled = emailEnabledInput.value === "true";
+		contactState.emailEnabled = emailEnabledInput.checked;
 
 		updateContactControlsVisibility();
 		renderPreview();
