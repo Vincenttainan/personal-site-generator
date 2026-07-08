@@ -281,8 +281,76 @@ function createContactControls() {
 
 				<div class="accordion-content">
 					${contactFields.map(field => createContactItemHTML(field)).join("")}
+
+					<div id="customContactLinksContainer"></div>
+
+					<button type="button" id="addCustomContactBtn" class="add-contact-btn">
+						＋ 新增自訂連結
+					</button>
 				</div>
 			</details>
+		</div>
+	`;
+
+	renderCustomContactControls();
+}
+
+function renderCustomContactControls() {
+	const container = document.getElementById("customContactLinksContainer");
+
+	if (!container) return;
+
+	container.innerHTML = contactState.customLinks
+		.map(link => createCustomContactItemHTML(link))
+		.join("");
+}
+
+function createCustomContactItemHTML(link) {
+	return `
+		<div class="contact-item custom-contact-item" data-custom-contact-id="${link.id}">
+			<div class="control-row">
+				<div class="control-item">
+					<span>顯示自訂連結</span>
+
+					<label class="switch">
+						<input 
+							type="checkbox" 
+							class="custom-contact-enabled-input"
+							data-custom-contact-id="${link.id}"
+							${link.enabled ? "checked" : ""}
+						>
+						<span class="switch-slider"></span>
+					</label>
+				</div>
+
+				<button 
+					type="button" 
+					class="remove-contact-btn"
+					data-custom-contact-id="${link.id}"
+				>
+					移除
+				</button>
+			</div>
+
+			<div class="contact-control-section">
+				<label>顯示名稱</label>
+				<input 
+					type="text"
+					class="custom-contact-label-input"
+					data-custom-contact-id="${link.id}"
+					placeholder="例如 Instagram、YouTube、Blog"
+					value="${link.label}"
+				>
+
+				<label>連結網址</label>
+				<input 
+					type="url"
+					class="custom-contact-value-input"
+					data-custom-contact-id="${link.id}"
+					placeholder="https://example.com"
+					value="${link.value}"
+				>
+			</div>
 		</div>
 	`;
 }

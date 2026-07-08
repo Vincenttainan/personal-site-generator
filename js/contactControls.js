@@ -50,10 +50,12 @@ function bindContactEvents() {
 			renderPreview();
 		});
 	});
+
+	bindCustomContactEvents();
 }
 
 function getEnabledContactLinks() {
-	return contactFields
+	const defaultLinks = contactFields
 		.map(field => {
 			const state = contactState[field.key];
 
@@ -68,6 +70,21 @@ function getEnabledContactLinks() {
 			};
 		})
 		.filter(link => link !== null);
+
+	const customLinks = contactState.customLinks
+		.map(link => {
+			if (!link.enabled || !link.label || !link.value) return null;
+
+			return {
+				key: link.id,
+				label: link.label,
+				href: normalizeUrl(link.value),
+				openNewTab: true
+			};
+		})
+		.filter(link => link !== null);
+
+	return [...defaultLinks, ...customLinks];
 }
 
 function buildContactHref(field, value) {
@@ -90,4 +107,89 @@ function normalizeUrl(url) {
 	}
 
 	return `https://${url}`;
+}
+
+function bindCustomContactEvents() {
+	const addButton = document.getElementById("addCustomContactBtn");
+
+	if (addButton) {
+		addButton.addEventListener("click", () => {
+			addCustomContactLink();
+		});
+	}
+
+	bindCustomContactItemEvents();
+}
+
+function bindCustomContactItemEvents() {
+	const enabledInputs = document.querySelectorAll(".custom-contact-enabled-input");
+	const labelInputs = document.querySelectorAll(".custom-contact-label-input");
+	const valueInputs = document.querySelectorAll(".custom-contact-value-input");
+	const removeButtons = document.querySelectorAll(".remove-contact-btn");
+
+	enabledInputs.forEach(input => {
+		input.addEventListener("change", () => {
+			const link = findCustomContactLink(input.dataset.customContactId);
+
+			if (!link) return;
+
+			link.enabled = input.checked;
+			renderPreview();
+		});
+	});
+
+	labelInputs.forEach(input => {
+		input.addEventListener("input", () => {
+			const link = findCustomContactLink(input.dataset.customContactId);
+
+			if (!link) return;
+
+			link.label = input.value.trim();
+			renderPreview();
+		});
+	});
+
+	valueInputs.forEach(input => {
+		input.addEventListener("input", () => {
+			const link = findCustomContactLink(input.dataset.customContactId);
+
+			if (!link) return;
+
+			link.value = input.value.trim();
+			renderPreview();
+		});
+	});
+
+	removeButtons.forEach(button => {
+		button.addEventListener("click", () => {
+			removeCustomContactLink(button.dataset.customContactId);
+		});
+	});
+}
+
+function addCustomContactLink() {
+	const newLink = {
+		id: `custom_${Date.now()}`,
+		enabled: true,
+		label: "",
+		value: ""
+	};
+
+	contactState.customLinks.push(newLink);
+
+	renderCustomContactControls();
+	bindCustomContactItemEvents();
+	renderPreview();
+}
+
+function removeCustomContactLink(id) {
+	contactState.customLinks = contactState.customLinks.filter(link => link.id !== id);
+
+	renderCustomContactControls();
+	bindCustomContactItemEvents();
+	renderPreview();
+}
+
+function findCustomContactLink(id) {
+	return contactState.customLinks.find(link => link.id === id);
 }

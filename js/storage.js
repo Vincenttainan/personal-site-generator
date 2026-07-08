@@ -198,9 +198,16 @@ function applyProjectData(projectData) {
     }
 	if (projectData.contact) {
 		Object.keys(projectData.contact).forEach(key => {
+			if (key === "customLinks") {
+				contactState.customLinks = Array.isArray(projectData.contact.customLinks)
+					? projectData.contact.customLinks
+					: [];
+
+				return;
+			}
+
 			if (!contactState[key]) return;
 
-			// 支援新版格式：contact.email.enabled / contact.email.value
 			if (typeof projectData.contact[key] === "object") {
 				contactState[key].enabled = projectData.contact[key].enabled ?? false;
 				contactState[key].value = projectData.contact[key].value ?? "";
@@ -229,6 +236,8 @@ function applyProjectData(projectData) {
 			}
 		});
 
+		renderCustomContactControls();
+		bindCustomContactItemEvents();
 		updateContactControlsVisibility();
 	}
 

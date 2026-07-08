@@ -98,7 +98,8 @@ window.PortfolioData = {
 		website: {
 			enabled: false,
 			value: ""
-		}
+		},
+		customLinks: []
 	},
 
 	avatarState: {
