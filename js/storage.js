@@ -30,6 +30,10 @@ function getCurrentProjectData() {
 			backgroundColor: avatarState.backgroundColor,
 			textColor: avatarState.textColor,
 			fontSize: avatarState.fontSize
+		},
+		contact: {
+			emailEnabled: contactState.emailEnabled,
+			email: contactState.email
 		}
 	};
 }
@@ -195,6 +199,30 @@ function applyProjectData(projectData) {
             avatarState.fontSize = projectData.avatar.fontSize;
         }
     }
+	if (projectData.contact) {
+		if (projectData.contact.emailEnabled !== undefined) {
+			contactState.emailEnabled = projectData.contact.emailEnabled;
+		}
+
+		if (projectData.contact.email !== undefined) {
+			contactState.email = projectData.contact.email;
+		}
+
+		const {
+			emailEnabledInput,
+			emailInput
+		} = App.elements;
+
+		if (emailEnabledInput) {
+			emailEnabledInput.value = String(contactState.emailEnabled);
+		}
+
+		if (emailInput) {
+			emailInput.value = contactState.email;
+		}
+
+		updateContactControlsVisibility();
+	}
 
 	renderPreview();
 }

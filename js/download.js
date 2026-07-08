@@ -47,6 +47,14 @@ function generatePortfolioHtml() {
 		? skills.map(skill => `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer}; font-size: ${fontSizeState.skills}px;">${skill}</span>`).join("\n\t\t\t\t\t")
 		: `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer}; font-size: ${fontSizeState.skills}px;">技能</span>`;
 
+	const contactHTML = contactState.emailEnabled && contactState.email
+	? `
+				<div class="contact-links">
+					<a class="contact-link" href="mailto:${contactState.email}">Email</a>
+				</div>
+	`
+	: "";
+
 	return `
 <!DOCTYPE html>
 <html lang="zh-Hant">
@@ -143,6 +151,31 @@ function generatePortfolioHtml() {
 			border-radius: 999px;
 		}
 
+		.contact-links {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+			margin-top: 18px;
+		}
+
+		.contact-link {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			padding: 8px 14px;
+			border-radius: 999px;
+			background: #222;
+			color: white;
+			font-size: 14px;
+			text-decoration: none;
+			transition: 0.2s;
+		}
+
+		.contact-link:hover {
+			background: #444;
+			transform: translateY(-1px);
+		}
+
 		@media (max-width: 700px) {
 			.profile-card {
 				flex-direction: column;
@@ -173,6 +206,8 @@ function generatePortfolioHtml() {
 				<div class="skills">
 					${skillHTML}
 				</div>
+
+				${contactHTML}
 			</div>
 		</section>
 	</main>
@@ -239,6 +274,14 @@ function generateZipFile() {
 		? skills.map(skill => `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer}; font-size: ${fontSizeState.skills}px;">${skill}</span>`).join("\n\t\t\t\t\t")
 		: `<span style="color: ${colorState.skills}; background: ${colorState.skills_outer}; font-size: ${fontSizeState.skills}px;">技能</span>`;
 
+	const contactHTML = contactState.emailEnabled && contactState.email
+	? `
+				<div class="contact-links">
+					<a class="contact-link" href="mailto:${contactState.email}">Email</a>
+				</div>
+	`
+	: "";
+	
 	const htmlContent = `
 <!DOCTYPE html>
 <html lang="zh-Hant">
@@ -266,6 +309,8 @@ function generateZipFile() {
 				<div class="skills">
 					${skillHTML}
 				</div>
+
+				${contactHTML}
 			</div>
 		</section>
 	</main>
@@ -366,6 +411,31 @@ body {
 	background: #f1f3f5;
 	border-radius: 999px;
 	font-size: 14px;
+}
+
+.contact-links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 18px;
+}
+
+.contact-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px 14px;
+	border-radius: 999px;
+	background: #222;
+	color: white;
+	font-size: 14px;
+	text-decoration: none;
+	transition: 0.2s;
+}
+
+.contact-link:hover {
+	background: #444;
+	transform: translateY(-1px);
 }
 
 @media (max-width: 700px) {

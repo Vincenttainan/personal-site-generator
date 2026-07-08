@@ -23,12 +23,18 @@ function cacheElements() {
 		introPreview: document.getElementById("introPreview"),
 		skillsPreview: document.getElementById("skillsPreview"),
 
+		contactLinksPreview: document.getElementById("contactLinksPreview"),
+
 		avatarModeInput: document.getElementById("avatarModeInput"),
 		avatarImageInput: document.getElementById("avatarImageInput"),
 		avatarSizeInput: document.getElementById("avatarSizeInput"),
 		avatarFontSizeInput: document.getElementById("avatarFontSizeInput"),
 		avatarPhotoControls: document.getElementById("avatarPhotoControls"),
 		avatarInitialControls: document.getElementById("avatarInitialControls"),
+
+		emailEnabledInput: document.getElementById("emailEnabledInput"),
+		emailInput: document.getElementById("emailInput"),
+		emailControls: document.getElementById("emailControls"),
 
 		avatarSizeInputs: document.querySelectorAll(".avatar-size-input"),
 		avatarSizeMinusButtons: document.querySelectorAll(".avatar-size-minus"),
@@ -76,12 +82,14 @@ function initApp() {
 	createGlobalControls();
 	createEditorFields();
 	createAvatarControls();
+	createContactControls();
 
 	cacheElements();
 
 	bindStorageEvents();
 	bindTemplateEvents();
 	bindAvatarEvents();
+	bindContactEvents();
 	bindColorModalEvents();
 	bindFontSizeEvents();
 	bindDownloadEvents();
@@ -91,6 +99,7 @@ function initApp() {
 
 	createColorGrid();
 	updateAvatarControlsVisibility();
+	updateContactControlsVisibility();
 	renderPreview();
 }
 

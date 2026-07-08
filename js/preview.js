@@ -62,6 +62,24 @@ function updateFontSizeInputs() {
 	skillsSizeInput.value = fontSizeState.skills;
 }
 
+function renderContactLinks() {
+	const { contactLinksPreview } = App.elements;
+
+	if (!contactLinksPreview) return;
+
+	contactLinksPreview.innerHTML = "";
+
+	if (!contactState.emailEnabled) return;
+	if (!contactState.email) return;
+
+	const emailLink = document.createElement("a");
+	emailLink.href = `mailto:${contactState.email}`;
+	emailLink.textContent = "Email";
+	emailLink.className = "contact-link";
+
+	contactLinksPreview.appendChild(emailLink);
+}
+
 function renderPreview() {
 	const {
 		nameInput,
@@ -124,6 +142,8 @@ function renderPreview() {
 		skillTag.style.background = colorState.skills_outer;
 		skillTag.style.fontSize = `${fontSizeState.skills}px`;
 	});
+
+	renderContactLinks();
 
 	previewArea.style.background = colorState.background;
 	profileCard.style.background = colorState.card;

@@ -47,6 +47,11 @@ window.PortfolioData = {
 		skills: { min: 0, max: 999 }
 	},
 
+	contactState: {
+		emailEnabled: false,
+		email: ""
+	},
+
 	avatarState: {
 		mode: "initial", // initial = 姓氏, photo = 照片
 		imageData: "",

@@ -268,6 +268,44 @@ function createAvatarControls() {
 	container.insertAdjacentHTML("beforeend", avatarControlHTML);
 }
 
+function createContactControls() {
+	const container = document.getElementById("contactControlsContainer");
+
+	container.innerHTML = `
+		<div class="form-group">
+			<details class="editor-accordion" data-flash-target="contact">
+				<summary class="accordion-title">
+					<span>聯絡資訊</span>
+					<span class="accordion-icon">＋</span>
+				</summary>
+
+				<div class="accordion-content">
+					<div class="control-row">
+						<div class="control-item">
+							<span>顯示 Email</span>
+
+							<select id="emailEnabledInput" class="small-select">
+								<option value="false">關閉</option>
+								<option value="true">打開</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="contact-control-section" id="emailControls">
+						<label for="emailInput">Email</label>
+						<input 
+							type="email" 
+							id="emailInput" 
+							placeholder="example@gmail.com"
+							value="${contactState.email}"
+						>
+					</div>
+				</div>
+			</details>
+		</div>
+	`;
+}
+
 function getFlashElement(target) {
 	const {
 		previewArea,
@@ -277,7 +315,8 @@ function getFlashElement(target) {
 		titlePreview,
 		subheadingPreview,
 		introPreview,
-		skillsPreview
+		skillsPreview,
+		contactLinksPreview
 	} = App.elements;
 
 	const flashMap = {
