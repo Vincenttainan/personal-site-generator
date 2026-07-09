@@ -101,10 +101,6 @@ function createEditorFields() {
 	container.innerHTML = editorFields.map(field => {
 		const value = defaultProfile[field.key] || "";
 
-		const inputHTML = field.type === "textarea"
-			? `<textarea id="${field.inputId}" rows="${field.rows || 4}">${value}</textarea>`
-			: `<input type="text" id="${field.inputId}" value="${value}" />`;
-
 		const colorControl = field.hasColor
 			? `
 				<div class="control-item">
@@ -147,6 +143,41 @@ function createEditorFields() {
 			`
 			: "";
 
+		const controlRow = `
+			<div class="control-row">
+				${colorControl}
+				${outerColorControl}
+				${sizeControl}
+			</div>
+		`;
+
+		if (field.type === "skills") {
+			return `
+				<div class="form-group">
+					<details class="editor-accordion" data-flash-target="${field.key}">
+						<summary class="accordion-title">
+							<span>${field.label}</span>
+							<span class="accordion-icon">＋</span>
+						</summary>
+
+						<div class="accordion-content">
+							${controlRow}
+
+							<div id="skillsEditorList"></div>
+
+							<button type="button" id="addSkillBtn" class="add-skill-btn">
+								＋ 新增技能
+							</button>
+						</div>
+					</details>
+				</div>
+			`;
+		}
+
+		const inputHTML = field.type === "textarea"
+			? `<textarea id="${field.inputId}" rows="${field.rows || 4}">${value}</textarea>`
+			: `<input type="text" id="${field.inputId}" value="${value}" />`;
+
 		const helpText = field.helpText
 			? `<small>${field.helpText}</small>`
 			: "";
@@ -160,11 +191,7 @@ function createEditorFields() {
 					</summary>
 
 					<div class="accordion-content">
-						<div class="control-row">
-							${colorControl}
-							${outerColorControl}
-							${sizeControl}
-						</div>
+						${controlRow}
 
 						${inputHTML}
 						${helpText}

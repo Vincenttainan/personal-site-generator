@@ -5,8 +5,7 @@ function getCurrentProjectData() {
 		nameInput,
 		titleInput,
 		subheadingInput,
-		introInput,
-		skillsInput
+		introInput
 	} = App.elements;
 
 	return {
@@ -15,7 +14,7 @@ function getCurrentProjectData() {
 			title: titleInput.value,
 			subheading: subheadingInput.value,
 			intro: introInput.value,
-			skills: skillsInput.value
+			skills: [...getRawSkillsArray()]
 		},
 		colors: {
 			...colorState
@@ -135,8 +134,7 @@ function applyProjectData(projectData) {
 		nameInput,
 		titleInput,
 		subheadingInput,
-		introInput,
-		skillsInput
+		introInput
 	} = App.elements;
 
 	if (projectData.profile) {
@@ -144,7 +142,18 @@ function applyProjectData(projectData) {
 		titleInput.value = projectData.profile.title ?? "";
 		subheadingInput.value = projectData.profile.subheading ?? "";
 		introInput.value = projectData.profile.intro ?? "";
-		skillsInput.value = projectData.profile.skills ?? "";
+		if (projectData.profile.skills !== undefined) {
+			if (Array.isArray(projectData.profile.skills)) {
+				defaultProfile.skills = projectData.profile.skills;
+			} else {
+				defaultProfile.skills = String(projectData.profile.skills)
+					.split(",")
+					.map(skill => skill.trim())
+					.filter(skill => skill !== "");
+			}
+
+			renderSkillControls();
+		}
 	}
 
 	if (projectData.colors) {

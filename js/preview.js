@@ -93,7 +93,6 @@ function renderPreview() {
 		titleInput,
 		subheadingInput,
 		introInput,
-		skillsInput,
 		namePreview,
 		titlePreview,
 		subheadingPreview,
@@ -107,11 +106,7 @@ function renderPreview() {
 	const title = titleInput.value.trim();
 	const subheading = subheadingInput.value.trim();
 	const intro = introInput.value.trim();
-
-	const skills = skillsInput.value
-		.split(",")
-		.map(skill => skill.trim())
-		.filter(skill => skill !== "");
+	const skills = getSkillsArray();
 
 	namePreview.textContent = name || "你的姓名";
 	titlePreview.textContent = title || "你的身分 / 標題";

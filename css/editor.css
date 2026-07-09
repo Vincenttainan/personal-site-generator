@@ -423,3 +423,50 @@
 .custom-contact-item label:not(:first-child) {
 	margin-top: 12px;
 }
+
+.skill-editor-item {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.skill-editor-item input {
+	flex: 1;
+}
+
+.remove-skill-btn {
+	border: none;
+	border-radius: 999px;
+	padding: 8px 12px;
+	background: #ef4444;
+	color: white;
+	font-size: 13px;
+	font-family: inherit;
+	cursor: pointer;
+	transition: 0.2s;
+	white-space: nowrap;
+}
+
+.remove-skill-btn:hover {
+	background: #dc2626;
+	transform: translateY(-1px);
+}
+
+.add-skill-btn {
+	width: 100%;
+	border: 1px dashed #999;
+	border-radius: 14px;
+	padding: 12px;
+	background: #f8fafc;
+	color: #222;
+	font-size: 14px;
+	font-family: inherit;
+	cursor: pointer;
+	transition: 0.2s;
+}
+
+.add-skill-btn:hover {
+	background: #f1f3f5;
+	transform: translateY(-1px);
+}

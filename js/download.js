@@ -37,8 +37,7 @@ function generatePortfolioHtml() {
 		nameInput,
 		titleInput,
 		subheadingInput,
-		introInput,
-		skillsInput
+		introInput
 	} = App.elements;
 
 	const name = nameInput.value.trim() || "你的姓名";
@@ -46,10 +45,7 @@ function generatePortfolioHtml() {
 	const subheading = subheadingInput.value.trim() || "這裡會顯示小標。";
 	const intro = introInput.value.trim() || "這裡會顯示你的自我介紹。";
 
-	const skills = skillsInput.value
-		.split(",")
-		.map(skill => skill.trim())
-		.filter(skill => skill !== "");
+	const skills = getSkillsArray();
 
 	const avatarText = name ? name[0] : "你";
 
@@ -251,8 +247,7 @@ function generateZipFile() {
 		nameInput,
 		titleInput,
 		subheadingInput,
-		introInput,
-		skillsInput
+		introInput
 	} = App.elements;
 
 	const name = nameInput.value.trim() || "你的姓名";
@@ -260,10 +255,7 @@ function generateZipFile() {
 	const subheading = subheadingInput.value.trim() || "這裡會顯示小標。";
 	const intro = introInput.value.trim() || "這裡會顯示你的自我介紹。";
 
-	const skills = skillsInput.value
-		.split(",")
-		.map(skill => skill.trim())
-		.filter(skill => skill !== "");
+	const skills = getSkillsArray();
 
 	const avatarText = name ? name[0] : "你";
 	if (avatarState.mode === "photo" && avatarState.imageData && !App.avatarFileBlob) {

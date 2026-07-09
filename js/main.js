@@ -4,7 +4,6 @@ function cacheElements() {
 		titleInput: document.getElementById("titleInput"),
 		subheadingInput: document.getElementById("subheadingInput"),
 		introInput: document.getElementById("introInput"),
-		skillsInput: document.getElementById("skillsInput"),
 		downloadBtn: document.getElementById("downloadBtn"),
 		downloadFileNameInput: document.getElementById("downloadFileNameInput"),
 		previewWebsiteBtn: document.getElementById("previewWebsiteBtn"),
@@ -61,15 +60,13 @@ function bindBasicInputEvents() {
 		nameInput,
 		titleInput,
 		subheadingInput,
-		introInput,
-		skillsInput
+		introInput
 	} = App.elements;
 
 	nameInput.addEventListener("input", renderPreview);
 	titleInput.addEventListener("input", renderPreview);
 	subheadingInput.addEventListener("input", renderPreview);
 	introInput.addEventListener("input", renderPreview);
-	skillsInput.addEventListener("input", renderPreview);
 }
 
 function initApp() {
@@ -88,6 +85,7 @@ function initApp() {
 	bindContactEvents();
 	bindColorModalEvents();
 	bindFontSizeEvents();
+	bindSkillEvents();
 	bindDownloadEvents();
 	bindBasicInputEvents();
 

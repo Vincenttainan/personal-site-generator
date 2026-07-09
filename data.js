@@ -4,7 +4,7 @@ window.PortfolioData = {
 		name: "你的姓名",
 		title: "你的身分 / 標題",
 		intro: "這裡會顯示你的自我介紹",
-		skills: "技能1, 技能2, 技能3, 技能4"
+		skills: ["技能1", "技能2", "技能3", "技能4"]
 	},
 
 	colorState: {
@@ -182,7 +182,7 @@ window.PortfolioData = {
 		{
 			key: "skills",
 			label: "技能",
-			type: "text",
+			type: "skills",
 			inputId: "skillsInput",
 			sizeInputId: "skillsSizeInput",
 			hasColor: true,
@@ -190,8 +190,7 @@ window.PortfolioData = {
 			hasSize: true,
 			defaultSize: 14,
 			minSize: 0,
-			maxSize: 999,
-			helpText: "請用逗號（, ）分隔，例如：技能1, 技能2, 技能3"
+			maxSize: 999
 		}
 	],
 
